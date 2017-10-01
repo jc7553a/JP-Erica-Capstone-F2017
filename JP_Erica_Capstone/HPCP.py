@@ -8,6 +8,7 @@ from scipy.sparse import coo_matrix
 from scipy.signal import spectrogram, convolve2d
 import json
 import sys
+import os
 
 '''
 def main():
@@ -18,6 +19,7 @@ def main():
 '''
 
 def hpcp(file_name,
+         pathVal,
          win_size=4096,
          hop_size=1024,
          window= 'hann',
@@ -77,6 +79,13 @@ def hpcp(file_name,
     Int. Conf. on Digital Audio Effects (DAFx-11), Paris, France (pp. 73–80).
     Retrieved from http://recherche.ircam.fr/pub/dafx11/Papers/14_e.pdf
     """
+    if pathVal == 1:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord')
+    if pathVal == 2:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord')
+    if pathVal == 3:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord')
+    
 
     # spectrogram
     y, sr = read_audio(file_name)
@@ -356,4 +365,5 @@ def main():
 '''
 if __name__ == '__main__':
     main()
+
 '''

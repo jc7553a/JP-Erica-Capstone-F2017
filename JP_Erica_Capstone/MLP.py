@@ -19,7 +19,7 @@ class MLP(object):
 
         # model
         self.x = tf.placeholder(tf.float32, [None, self.n_features])
-        self.y = tf.placeholder(tf.float32, [None,2])
+        self.y = tf.placeholder(tf.float32, [None,1])
         self.hidden = tf.nn.sigmoid(tf.add(tf.matmul(self.x, self.weights['w1']), self.weights['b1']))
         self.finish = tf.add(tf.matmul(self.hidden, self.weights['w2']), self.weights['b2'])
 
@@ -38,8 +38,8 @@ class MLP(object):
         all_weights = dict()
         all_weights['w1'] = tf.Variable(tf.truncated_normal([self.n_features, self.n_hidden], stddev = .001), name = 'weights1')
         all_weights['b1'] = tf.Variable(tf.truncated_normal([self.n_hidden], stddev = .001), name = 'bias1')
-        all_weights['w2'] = tf.Variable(tf.truncated_normal([self.n_hidden, 2], stddev = .001), name = 'weights_o')
-        all_weights['b2'] = tf.Variable(tf.truncated_normal([2], stddev = .001), name = 'biases_o')
+        all_weights['w2'] = tf.Variable(tf.truncated_normal([self.n_hidden, 1], stddev = .001), name = 'weights_o')
+        all_weights['b2'] = tf.Variable(tf.truncated_normal([1], stddev = .001), name = 'biases_o')
         return all_weights
 
     def train(self, X, Y):
