@@ -91,7 +91,7 @@ def cleanUpChroma(chromaGiven):
         j = 0
         while j < (len(chromaGiven[i])):
             if np.sum(chromaGiven[i][j]) == 0:
-                chromaGiven[i] = np.delete(chromaGiven[i], j, axis = 0)
+                np.delete(chromaGiven[i][j], j, axis = 0)
                 j -= 1
             j+=1
     return chromaGiven
@@ -104,7 +104,7 @@ def addClassification(chromaGiven, val):
         for j in range(len(chromaGiven[i])):
             holder = []
             for t in range(len(chromaGiven[i][j])):
-                holder.append(chromaGiven[i][j][t]*1000)
+                holder.append(chromaGiven[i][j][t]*100)
             holder.append(val)
         chromaBack.append(holder)
     return chromaBack
@@ -114,7 +114,7 @@ def trainNetwork(data):
     print("Training Network....")
     network = net.MLP(12, 15)
     np.random.shuffle(data)
-    for i in range(300):
+    for i in range(100):
         for j in range(len(data)):
             #rand = randint(0, len(data)-1)
             network.train([data[j][0:12]], [[data[j][12]]])
@@ -130,7 +130,7 @@ def testNetwork(network, testingDataGiven):
     for i in range(len(values)):
         if values[i] < 1.65:
             threshedValues.append(1)
-        elif values[i] > 1.65 and values[i] < 2.5:
+        elif values[i] > 1.35 and values[i] < 2.7:
             threshedValues.append(2)
         elif values[i] > 2.5:
             threshedValues.append(3)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 2)),2)
     GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 3)),3)
 
-
+    '''
     testingData = []
     for i in range(5):
         testingData.append(AChroma[len(AChroma)-i-1])
@@ -180,6 +180,10 @@ if __name__ == '__main__':
     DChordCorrect = 0
     falseGChord = 0
     GChordCorrect = 0
+    actual = []
+    for i in range(len(testingData)):
+        actual.append(testingData[i][12])
+    print(actual)
     print(testingValues)
 
     for i in range(len(testingValues)):
@@ -203,4 +207,4 @@ if __name__ == '__main__':
     print(DChordCorrect)
     print(falseGChord)
     print(GChordCorrect)
-
+    '''
