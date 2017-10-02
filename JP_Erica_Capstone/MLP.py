@@ -19,11 +19,12 @@ class MLP(object):
 
         # model
         self.x = tf.placeholder(tf.float32, [None, self.n_features])
-        self.y = tf.placeholder(tf.float32, [None,1])
+        
         self.hidden = tf.nn.sigmoid(tf.add(tf.matmul(self.x, self.weights['w1']), self.weights['b1']))
         self.finish = tf.add(tf.matmul(self.hidden, self.weights['w2']), self.weights['b2'])
 
         # cost
+        self.y = tf.placeholder(tf.float32, [None,1])
         self.cost = tf.reduce_mean(tf.square(self.finish - self.y))
         self.optimizer = tf.train.GradientDescentOptimizer(0.05).minimize(self.cost)
 
@@ -47,7 +48,7 @@ class MLP(object):
         return cost
 
     def calc_total_cost(self, X, Y):
-        return self.sess.run(self.cost, feed_dict = {self.x: X, self.y: Y})
+        return self.sess.run(self.finish, feed_dict = {self.x: X, self.y: Y})
 
     def transform(self, X):
         return self.sess.run(self.hidden, feed_dict={self.x: X})

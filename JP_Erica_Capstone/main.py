@@ -8,6 +8,8 @@ import random as ra
 import math
 import sys
 import os
+import matplotlib.pylab as plt
+from random import randint
 
 
 def getData():
@@ -88,7 +90,7 @@ def cleanUpChroma(chromaGiven):
     for i in range(len(chromaGiven)):
         j = 0
         while j < (len(chromaGiven[i])):
-            if np.average(chromaGiven[i][j]) == 0:
+            if np.sum(chromaGiven[i][j]) == 0:
                 chromaGiven[i] = np.delete(chromaGiven[i], j, axis = 0)
                 j -= 1
             j+=1
@@ -102,18 +104,41 @@ def addClassification(chromaGiven, val):
         for j in range(len(chromaGiven[i])):
             holder = []
             for t in range(len(chromaGiven[i][j])):
-                holder.append(chromaGiven[i][j][t])
+                holder.append(chromaGiven[i][j][t]*1000)
             holder.append(val)
         chromaBack.append(holder)
     return chromaBack
 
-def trainNetwork(networkGiven, data):
-    totalLength = len(AChord) + len(DChord) + len(GChord)
+'''Train Neural Network'''
+def trainNetwork(data):
+    print("Training Network....")
+    network = net.MLP(12, 15)
     np.random.shuffle(data)
-    for i in range(totalLength*100):
-        networkGiven.train([data[i][0:12]], [data[0][13]])
+    for i in range(300):
+        for j in range(len(data)):
+            #rand = randint(0, len(data)-1)
+            network.train([data[j][0:12]], [[data[j][12]]])
         
-
+    return network
+        
+def testNetwork(network, testingDataGiven):
+    values = []
+    for i in range(len(testingDataGiven)):
+        values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
+    print(values)
+    threshedValues = []
+    for i in range(len(values)):
+        if values[i] < 1.65:
+            threshedValues.append(1)
+        elif values[i] > 1.65 and values[i] < 2.5:
+            threshedValues.append(2)
+        elif values[i] > 2.5:
+            threshedValues.append(3)
+    
+    return threshedValues
+                    
+                      
+    
     
 
 if __name__ == '__main__':
@@ -124,15 +149,58 @@ if __name__ == '__main__':
 
 
     testingData = []
-    testingData.append(AChroma[len(AChroma)-1])
-    testingData.append(AChroma[len(DChroma)-1])
-    testingData.append(AChroma[len(GChroma)-1])
+    for i in range(5):
+        testingData.append(AChroma[len(AChroma)-i-1])
+        testingData.append(DChroma[len(DChroma)-i-1])
+        testingData.append(GChroma[len(GChroma)-i-1])
+    
+    del AChroma[len(AChroma)-1]
+    del DChroma[len(DChroma)-1]
+    del GChroma[len(GChroma)-1]
+    del AChroma[len(AChroma)-1]
+    del DChroma[len(DChroma)-1]
+    del GChroma[len(GChroma)-1]
+    del AChroma[len(AChroma)-1]
+    del DChroma[len(DChroma)-1]
+    del GChroma[len(GChroma)-1]
+    del AChroma[len(AChroma)-1]
+    del DChroma[len(DChroma)-1]
+    del GChroma[len(GChroma)-1]
     del AChroma[len(AChroma)-1]
     del DChroma[len(DChroma)-1]
     del GChroma[len(GChroma)-1]
     totalData = np.concatenate((np.array(AChroma), np.array(DChroma)))
     totalData = np.concatenate((totalData, np.array(GChroma)))
-    np.random.shuffle(totalData)
-    print(totalData[0:4])
+    neuralNetwork = trainNetwork(totalData)
+    testingValues = testNetwork(neuralNetwork, testingData)
+    falseAChord = 0
+    AChordCorrect = 0
+    falseDChord = 0
     
-    #network = net.MLP(12, 15)
+    DChordCorrect = 0
+    falseGChord = 0
+    GChordCorrect = 0
+    print(testingValues)
+
+    for i in range(len(testingValues)):
+        if testingValues[i] == 1 and testingData[i][12] == 1:
+            AChordCorrect += 1
+        if testingValues[i] != 1 and testingData[i][12] == 1:
+            falseAChord += 1
+        if testingValues[i] == 2 and testingData[i][12] == 2:
+            DChordCorrect += 1
+        if testingValues[i] != 2 and testingData[i][12] == 2:
+            falseDChord +=1
+        if testingValues[i] == 3 and testingData[i][12] == 3:
+            GChordCorrect += 1
+        if testingValues[i] != 3 and testingData[i][12] == 3:
+            falseGChord +=1
+
+
+    print(falseAChord)
+    print(AChordCorrect)
+    print(falseDChord)
+    print(DChordCorrect)
+    print(falseGChord)
+    print(GChordCorrect)
+
