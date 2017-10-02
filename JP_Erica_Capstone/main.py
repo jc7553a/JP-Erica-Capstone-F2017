@@ -46,19 +46,14 @@ def getChroma(files, val):
     totalChroma = []
     for i in range(len(files)):
         totalChroma.append(HPCP.hpcp(files[0][0], val))
-    
     return totalChroma
                            
 '''Gets rid of Rows of 0's'''
 def cleanUpChroma(chromaGiven):
-    for i in range(len(chromaGiven)):
-        j = 0
-        while j < (len(chromaGiven[i])):
-            if np.sum(chromaGiven[i][j]) == 0:
-                np.delete(chromaGiven[i][j], j, axis = 0)
-                j -= 1
-            j+=1
-    return chromaGiven
+    chromaBack = np.array(chromaGiven)
+    for i in range(len(chromaBack)): 
+        chromaBack[i][~(chromaBack[i]==0).all(1)]
+    return chromaBack
 
 '''This is Wicked Dumb need to find a new way to append vals to end of
     Numpy Array'''
@@ -84,23 +79,25 @@ def trainNetwork(data):
             rand = randint(0, len(data)-1)
             if np.sum(data[rand][0:12]) !=0:
                 network.train([data[rand][0:12]], [[data[rand][12]]])
+    print("Done Training")
     return network
 
 
 '''Testing Network'''        
 def testNetwork(network, testingDataGiven):
     values = []
+    print("Testing Values...")
     for i in range(len(testingDataGiven)):
         values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
     threshedValues = []
     for i in range(len(values)):
-        if values[i] < 1.65:
+        if values[i] < 1.5:
             threshedValues.append(1)
-        elif values[i] > 1.35 and values[i] < 2.7:
+        elif values[i] >= 1.5 and values[i] <= 2.5:
             threshedValues.append(2)
         elif values[i] > 2.5:
             threshedValues.append(3)
-    
+    print("Done Testing")
     return threshedValues
                     
                       
@@ -109,23 +106,29 @@ def testNetwork(network, testingDataGiven):
 
 if __name__ == '__main__':
     AMajor, DMajor, GMajor = getData()
-    AChroma = addClassification(getChroma(AMajor, 1),1)
-    DChroma = addClassification(getChroma(DMajor, 2),2)
-    GChroma = addClassification(getChroma(GMajor, 3),3)
+    AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
+    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 2)),2)
+    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 3)),3)
     testingData = []
-    testingData.append(AChroma[len(AChroma)-1])
-    testingData.append(DChroma[len(DChroma)-1])
-    testingData.append(GChroma[len(GChroma)-1])
-    
-    del AChroma[len(AChroma)-1]
-    del DChroma[len(DChroma)-1]
-    del GChroma[len(GChroma)-1]
+    for i in range(100):
+        testingData.append(AChroma[len(AChroma)-1])
+        del AChroma[len(AChroma)-1]
+    for i in range(100):
+        testingData.append(DChroma[len(DChroma)-1])
+        del DChroma[len(DChroma)-1]
+    for i in range(100):
+        testingData.append(GChroma[len(GChroma)-1])
+        del GChroma[len(GChroma)-1]
     
     totalData = np.concatenate((np.array(AChroma), np.array(DChroma)))
     totalData = np.concatenate((totalData, np.array(GChroma)))
+    testingData = np.array(testingData)
     
+    '''This weird thing gets rid of Rows
+        Rows of All 0's quickly in Numpy Arrays'''
+    testingData[~(testingData == 0).all(1)]
     neuralNetwork = trainNetwork(totalData)
-    testingValues = testNetwork(neuralNetwork, cleanUpChroma(testingData))
+    testingValues = testNetwork(neuralNetwork, testingData)
     falseAChord = 0
     AChordCorrect = 0
     falseDChord = 0
@@ -157,3 +160,4 @@ if __name__ == '__main__':
     print(falseGChord)
     print(GChordCorrect)
     
+
