@@ -14,8 +14,12 @@ from random import randint
 
 def getData():
     path = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord'
-    path2 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord'
-    path3 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord'
+    path2 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\BChord'
+    path3 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\CChord'
+    path4 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord'
+    path5 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\EChord'
+    path6 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\FChord'
+    path7 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord'
 
     AMajor = []
     for filename in os.listdir(path):
@@ -23,22 +27,50 @@ def getData():
         holder.append(filename)
         holder.append([1])
         AMajor.append(holder)
+        
+    BMajor = []
+    for filename in os.listdir(path2):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        BMajor.append(holder)
+
+    CMajor = []
+    for filename in os.listdir(path3):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        CMajor.append(holder)
 
     DMajor = []
-    for filename in os.listdir(path2):
+    for filename in os.listdir(path4):
         holder = []
         holder.append(filename)
         holder.append([2])
         DMajor.append(holder)
 
+    EMajor = []
+    for filename in os.listdir(path5):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        EMajor.append(holder)
+
+    FMajor = []
+    for filename in os.listdir(path6):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        FMajor.append(holder)
+
     GMajor = []
-    for filename in os.listdir(path3):
+    for filename in os.listdir(path7):
         holder = []
         holder.append(filename)
         holder.append([3])
         GMajor.append(holder)
         
-    return AMajor, DMajor, GMajor
+    return AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor
 
 
 '''Running Harmonic Pitch Class Profile on Training Data'''
@@ -74,7 +106,7 @@ def trainNetwork(data):
     print("Training Network....")
     network = net.MLP(12, 15)
     np.random.shuffle(data)
-    for i in range(5):
+    for i in range(10):
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
             if np.sum(data[rand][0:12]) !=0:
@@ -95,8 +127,16 @@ def testNetwork(network, testingDataGiven):
             threshedValues.append(1)
         elif values[i] >= 1.5 and values[i] <= 2.5:
             threshedValues.append(2)
-        elif values[i] > 2.5:
+        elif values[i] > 2.5 and values[i]<= 3.5:
             threshedValues.append(3)
+        elif values[i] > 3.5 and  values[i]<= 4.5:
+            threshedValues.append(4)
+        elif values[i] > 4.5 and values[i] <= 5.5 :
+            threshedValues.append(5)
+        elif values[i] > 5.5 and values[i] <= 6.5:
+            threshedValues.append(6)
+        elif values[i] > 6.5:
+            threshedValues.append(7)
     print("Done Testing")
     return threshedValues
                     
@@ -105,23 +145,44 @@ def testNetwork(network, testingDataGiven):
     
 
 if __name__ == '__main__':
-    AMajor, DMajor, GMajor = getData()
+    AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor = getData()
     AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
-    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 2)),2)
-    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 3)),3)
+    BChroma = addClassification(cleanUpChroma(getChroma(BMajor, 2)),2)
+    CChroma = addClassification(cleanUpChroma(getChroma(CMajor, 3)),3)
+    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 4)),4)
+    EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 5)),5)
+    FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 6)),6)
+    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 7)),7)
     testingData = []
     for i in range(100):
         testingData.append(AChroma[len(AChroma)-1])
         del AChroma[len(AChroma)-1]
     for i in range(100):
+        testingData.append(BChroma[len(BChroma)-1])
+        del BChroma[len(BChroma)-1]
+    for i in range(100):
+        testingData.append(CChroma[len(CChroma)-1])
+        del CChroma[len(CChroma)-1]
+    for i in range(100):
         testingData.append(DChroma[len(DChroma)-1])
         del DChroma[len(DChroma)-1]
+    for i in range(100):
+        testingData.append(EChroma[len(EChroma)-1])
+        del EChroma[len(EChroma)-1]
+    for i in range(100):
+        testingData.append(FChroma[len(FChroma)-1])
+        del FChroma[len(FChroma)-1]
     for i in range(100):
         testingData.append(GChroma[len(GChroma)-1])
         del GChroma[len(GChroma)-1]
     
-    totalData = np.concatenate((np.array(AChroma), np.array(DChroma)))
+    totalData = np.concatenate((np.array(AChroma), np.array(BChroma)))
+    totalData = np.concatenate((totalData, np.array(CChroma)))
+    totalData = np.concatenate((totalData, np.array(DChroma)))
+    totalData = np.concatenate((totalData, np.array(EChroma)))
+    totalData = np.concatenate((totalData, np.array(FChroma)))
     totalData = np.concatenate((totalData, np.array(GChroma)))
+    print(len(totalData))
     testingData = np.array(testingData)
     
     '''This weird thing gets rid of Rows
@@ -131,9 +192,16 @@ if __name__ == '__main__':
     testingValues = testNetwork(neuralNetwork, testingData)
     falseAChord = 0
     AChordCorrect = 0
+    falseBChord = 0
+    BChordCorrect = 0
+    falseCChord = 0
+    CChordCorrect = 0
     falseDChord = 0
-    
     DChordCorrect = 0
+    falseEChord = 0
+    EChordCorrect = 0
+    falseFChord = 0
+    FChordCorrect = 0
     falseGChord = 0
     GChordCorrect = 0
     actual = []
@@ -144,20 +212,52 @@ if __name__ == '__main__':
         if testingValues[i] != 1 and testingData[i][12] == 1:
             falseAChord += 1
         if testingValues[i] == 2 and testingData[i][12] == 2:
-            DChordCorrect += 1
+            BChordCorrect += 1
         if testingValues[i] != 2 and testingData[i][12] == 2:
-            falseDChord +=1
+            falseBChord +=1
         if testingValues[i] == 3 and testingData[i][12] == 3:
-            GChordCorrect += 1
+            CChordCorrect += 1
         if testingValues[i] != 3 and testingData[i][12] == 3:
+            falseCChord +=1
+        if testingValues[i] == 4 and testingData[i][12] == 4:
+            DChordCorrect += 1
+        if testingValues[i] != 4 and testingData[i][12] == 4:
+            falseDChord +=1
+        if testingValues[i] == 5 and testingData[i][12] == 5:
+            EChordCorrect += 1
+        if testingValues[i] != 5 and testingData[i][12] == 5:
+            falseEChord +=1
+        if testingValues[i] == 6 and testingData[i][12] == 6:
+            FChordCorrect += 1
+        if testingValues[i] != 6 and testingData[i][12] == 6:
+            falseFChord +=1
+        if testingValues[i] == 7 and testingData[i][12] == 7:
+            GChordCorrect += 1
+        if testingValues[i] != 7 and testingData[i][12] == 7:
             falseGChord +=1
+
+
+
 
 
     print(falseAChord)
     print(AChordCorrect)
+    print(falseBChord)
+    print(BChordCorrect)
+    print(falseCChord)
+    print(CChordCorrect)
     print(falseDChord)
     print(DChordCorrect)
+    print(falseEChord)
+    print(EChordCorrect)
+    print(falseFChord)
+    print(FChordCorrect)
     print(falseGChord)
     print(GChordCorrect)
-    
+
+    totalCorrect= AChordCorrect + BChordCorrect + CChordCorrect + DChordCorrect + EChordCorrect + FChordCorrect + GChordCorrect
+    total = totalCorrect +(falseAChord + falseBChord + falseCChord+ falseDChord + falseEChord + falseFChord + falseGChord)
+    print("")
+    print("Accuracy")
+    print(float(totalCorrect/total))
 

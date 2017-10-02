@@ -82,8 +82,16 @@ def hpcp(file_name,
     if pathVal == 1:
         os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord')
     if pathVal == 2:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord')
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\BChord')
     if pathVal == 3:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\CChord')
+    if pathVal == 4:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord')
+    if pathVal == 5:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\EChord')
+    if pathVal == 6:
+        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\FChord')
+    if pathVal == 7:
         os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord')
     
 
