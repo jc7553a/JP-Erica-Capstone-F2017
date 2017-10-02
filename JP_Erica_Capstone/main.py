@@ -96,7 +96,7 @@ def addClassification(chromaGiven, val):
         for j in range(shape[1]):
             holder = []
             for t in range(shape[2]):
-                holder.append(chromaGiven[i][j][t]*100)
+                holder.append(chromaGiven[i][j][t]*10)
             holder.append(val)
             chromaBack.append(holder)
     return chromaBack
@@ -106,10 +106,10 @@ def trainNetwork(data):
     print("Training Network....")
     network = net.MLP(12, 15)
     np.random.shuffle(data)
-    for i in range(10):
+    for i in range(6):
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
-            if np.sum(data[rand][0:12]) !=0:
+            if np.sum(data[0:12]) != 0:
                 network.train([data[rand][0:12]], [[data[rand][12]]])
     print("Done Training")
     return network
@@ -120,12 +120,13 @@ def testNetwork(network, testingDataGiven):
     values = []
     print("Testing Values...")
     for i in range(len(testingDataGiven)):
-        values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
+        if np.sum(testingDataGiven[i][0:12]) != 0:
+            values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
     threshedValues = []
     for i in range(len(values)):
-        if values[i] < 1.5:
+        if values[i] <= 1.6:
             threshedValues.append(1)
-        elif values[i] >= 1.5 and values[i] <= 2.5:
+        elif values[i] > 1.6 and values[i] <= 2.5:
             threshedValues.append(2)
         elif values[i] > 2.5 and values[i]<= 3.5:
             threshedValues.append(3)
@@ -237,24 +238,40 @@ if __name__ == '__main__':
             falseGChord +=1
 
 
-
-
-
+    print("AChord Tests")
     print(falseAChord)
     print(AChordCorrect)
+    print("BChord Tests")
     print(falseBChord)
     print(BChordCorrect)
+    print("CChord Tests")
     print(falseCChord)
     print(CChordCorrect)
+    print("DChord Tests")
     print(falseDChord)
     print(DChordCorrect)
+    print("EChord Tests")
     print(falseEChord)
     print(EChordCorrect)
+    print("FChord Tests")
     print(falseFChord)
     print(FChordCorrect)
+    print("GChord Tests")
     print(falseGChord)
     print(GChordCorrect)
 
+    print("E Values")
+    for i in range(100):
+        print(testingValues[i+400], end = '')
+        if i %25 ==0:
+            print("")
+
+    print("B Values")
+    for i in range(100):
+        print(testingValues[i+100], end = '')
+        if i %25 ==0:
+            print("")
+            
     totalCorrect= AChordCorrect + BChordCorrect + CChordCorrect + DChordCorrect + EChordCorrect + FChordCorrect + GChordCorrect
     total = totalCorrect +(falseAChord + falseBChord + falseCChord+ falseDChord + falseEChord + falseFChord + falseGChord)
     print("")
