@@ -41,51 +41,15 @@ def getData():
     return AMajor, DMajor, GMajor
 
 
+'''Running Harmonic Pitch Class Profile on Training Data'''
 def getChroma(files, val):
     totalChroma = []
     for i in range(len(files)):
-        totalChroma.append(HPCP.hpcp(files[i][0], val))
-
+        totalChroma.append(HPCP.hpcp(files[0][0], val))
+    
     return totalChroma
                            
-'''
-chroma = HPCP.hpcp('AMajor.wav')
-print(np.shape(chroma))
-chroma2 = HPCP.hpcp('DMajor7.wav')
-chroma3 = HPCP.hpcp('AMajorTest.wav')
-
-
-
-vals = []
-for i in range(len(chroma)):
-    holder = []
-    for j in range(len(chroma[i])):
-        holder.append(math.ceil(chroma[i][j]))
-    holder.append([1])
-    vals.append(holder)
-
-for i in range(len(chroma2)):
-    holder = []
-    for j in range(len(chroma2[i])):
-        holder.append(math.ceil(chroma2[i][j]))
-    holder.append([2])
-    vals.append(holder)
-
-
-network = net.MLP(12, 15)
-
-
-np.random.shuffle(vals)
-
-
-total = len(chroma2)+len(chroma)
-for t in range(400):
-    for i in range(total):
-        rand = ra.randint(0, len(vals)-1)
-        network.train([vals[rand][0:12]], [vals[rand][12]])
-
-
-'''
+'''Gets rid of Rows of 0's'''
 def cleanUpChroma(chromaGiven):
     for i in range(len(chromaGiven)):
         j = 0
@@ -100,13 +64,14 @@ def cleanUpChroma(chromaGiven):
     Numpy Array'''
 def addClassification(chromaGiven, val):
     chromaBack = []
-    for i in range(len(chromaGiven)):
-        for j in range(len(chromaGiven[i])):
+    shape = np.shape(chromaGiven)
+    for i in range(shape[0]):
+        for j in range(shape[1]):
             holder = []
-            for t in range(len(chromaGiven[i][j])):
+            for t in range(shape[2]):
                 holder.append(chromaGiven[i][j][t]*100)
             holder.append(val)
-        chromaBack.append(holder)
+            chromaBack.append(holder)
     return chromaBack
 
 '''Train Neural Network'''
@@ -114,18 +79,19 @@ def trainNetwork(data):
     print("Training Network....")
     network = net.MLP(12, 15)
     np.random.shuffle(data)
-    for i in range(100):
+    for i in range(5):
         for j in range(len(data)):
-            #rand = randint(0, len(data)-1)
-            network.train([data[j][0:12]], [[data[j][12]]])
-        
+            rand = randint(0, len(data)-1)
+            if np.sum(data[rand][0:12]) !=0:
+                network.train([data[rand][0:12]], [[data[rand][12]]])
     return network
-        
+
+
+'''Testing Network'''        
 def testNetwork(network, testingDataGiven):
     values = []
     for i in range(len(testingDataGiven)):
         values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
-    print(values)
     threshedValues = []
     for i in range(len(values)):
         if values[i] < 1.65:
@@ -143,36 +109,23 @@ def testNetwork(network, testingDataGiven):
 
 if __name__ == '__main__':
     AMajor, DMajor, GMajor = getData()
-    AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
-    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 2)),2)
-    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 3)),3)
-
-    '''
+    AChroma = addClassification(getChroma(AMajor, 1),1)
+    DChroma = addClassification(getChroma(DMajor, 2),2)
+    GChroma = addClassification(getChroma(GMajor, 3),3)
     testingData = []
-    for i in range(5):
-        testingData.append(AChroma[len(AChroma)-i-1])
-        testingData.append(DChroma[len(DChroma)-i-1])
-        testingData.append(GChroma[len(GChroma)-i-1])
+    testingData.append(AChroma[len(AChroma)-1])
+    testingData.append(DChroma[len(DChroma)-1])
+    testingData.append(GChroma[len(GChroma)-1])
     
     del AChroma[len(AChroma)-1]
     del DChroma[len(DChroma)-1]
     del GChroma[len(GChroma)-1]
-    del AChroma[len(AChroma)-1]
-    del DChroma[len(DChroma)-1]
-    del GChroma[len(GChroma)-1]
-    del AChroma[len(AChroma)-1]
-    del DChroma[len(DChroma)-1]
-    del GChroma[len(GChroma)-1]
-    del AChroma[len(AChroma)-1]
-    del DChroma[len(DChroma)-1]
-    del GChroma[len(GChroma)-1]
-    del AChroma[len(AChroma)-1]
-    del DChroma[len(DChroma)-1]
-    del GChroma[len(GChroma)-1]
+    
     totalData = np.concatenate((np.array(AChroma), np.array(DChroma)))
     totalData = np.concatenate((totalData, np.array(GChroma)))
+    
     neuralNetwork = trainNetwork(totalData)
-    testingValues = testNetwork(neuralNetwork, testingData)
+    testingValues = testNetwork(neuralNetwork, cleanUpChroma(testingData))
     falseAChord = 0
     AChordCorrect = 0
     falseDChord = 0
@@ -181,10 +134,6 @@ if __name__ == '__main__':
     falseGChord = 0
     GChordCorrect = 0
     actual = []
-    for i in range(len(testingData)):
-        actual.append(testingData[i][12])
-    print(actual)
-    print(testingValues)
 
     for i in range(len(testingValues)):
         if testingValues[i] == 1 and testingData[i][12] == 1:
@@ -207,4 +156,4 @@ if __name__ == '__main__':
     print(DChordCorrect)
     print(falseGChord)
     print(GChordCorrect)
-    '''
+    
