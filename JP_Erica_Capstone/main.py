@@ -83,9 +83,10 @@ def getChroma(files, val):
 '''Gets rid of Rows of 0's'''
 def cleanUpChroma(chromaGiven):
     chromaBack = np.array(chromaGiven)
+    chromaBack2 = []
     for i in range(len(chromaBack)): 
-        chromaBack[i][~(chromaBack[i]==0).all(1)]
-    return chromaBack
+        chromaBack2.append(chromaBack[i][~(chromaBack[i]==0).all(1)])
+    return chromaBack2
 
 '''This is Wicked Dumb need to find a new way to append vals to end of
     Numpy Array'''
@@ -96,7 +97,7 @@ def addClassification(chromaGiven, val):
         for j in range(shape[1]):
             holder = []
             for t in range(shape[2]):
-                holder.append(chromaGiven[i][j][t]*10)
+                holder.append(chromaGiven[i][j][t]*100)
             holder.append(val)
             chromaBack.append(holder)
     return chromaBack
@@ -188,7 +189,7 @@ if __name__ == '__main__':
     
     '''This weird thing gets rid of Rows
         Rows of All 0's quickly in Numpy Arrays'''
-    testingData[~(testingData == 0).all(1)]
+    testingData = testingData[~(testingData == 0).all(1)]
     neuralNetwork = trainNetwork(totalData)
     testingValues = testNetwork(neuralNetwork, testingData)
     falseAChord = 0
