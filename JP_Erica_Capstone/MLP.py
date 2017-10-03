@@ -26,7 +26,7 @@ class MLP(object):
         # cost
         self.y = tf.placeholder(tf.float32, [None,1])
         self.cost = tf.reduce_mean(tf.square(self.finish - self.y))
-        self.optimizer = tf.train.GradientDescentOptimizer(0.05).minimize(self.cost)
+        self.optimizer = tf.train.GradientDescentOptimizer(0.1).minimize(self.cost)
 
         init = tf.global_variables_initializer()
         self.sess = tf.Session()
