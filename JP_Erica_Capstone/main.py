@@ -188,7 +188,7 @@ if __name__ == '__main__':
     neuralNetwork = trainNetwork(totalData)
 
     '''Test Network'''
-    testingValues = testNetwork(neuralNetwork, testingData)
+    predictedValues = testNetwork(neuralNetwork, testingData)
 
     
     falseAChord = 0
@@ -207,34 +207,34 @@ if __name__ == '__main__':
     GChordCorrect = 0
     actual = []
 
-    for i in range(len(testingValues)):
-        if testingValues[i] == 1 and testingData[i][12] == 1:
+    for i in range(len(predictedValues)):
+        if predictedValues[i] == 1 and testingData[i][12] == 1:
             AChordCorrect += 1
-        elif testingValues[i] != 1 and testingData[i][12] == 1:
+        elif predictedValues[i] != 1 and testingData[i][12] == 1:
             falseAChord += 1
-        elif testingValues[i] == 2 and testingData[i][12] == 2:
+        elif predictedValues[i] == 2 and testingData[i][12] == 2:
             BChordCorrect += 1
-        elif testingValues[i] != 2 and testingData[i][12] == 2:
+        elif predictedValues[i] != 2 and testingData[i][12] == 2:
             falseBChord +=1
-        elif testingValues[i] == 3 and testingData[i][12] == 3:
+        elif predictedValues[i] == 3 and testingData[i][12] == 3:
             CChordCorrect += 1
-        elif testingValues[i] != 3 and testingData[i][12] == 3:
+        elif predictedValues[i] != 3 and testingData[i][12] == 3:
             falseCChord +=1
-        elif testingValues[i] == 4 and testingData[i][12] == 4:
+        elif predictedValues[i] == 4 and testingData[i][12] == 4:
             DChordCorrect += 1
-        elif testingValues[i] != 4 and testingData[i][12] == 4:
+        elif predictedValues[i] != 4 and testingData[i][12] == 4:
             falseDChord +=1
-        elif testingValues[i] == 5 and testingData[i][12] == 5:
+        elif predictedValues[i] == 5 and testingData[i][12] == 5:
             EChordCorrect += 1
-        elif testingValues[i] != 5 and testingData[i][12] == 5:
+        elif predictedValues[i] != 5 and testingData[i][12] == 5:
             falseEChord +=1
-        elif testingValues[i] == 6 and testingData[i][12] == 6:
+        elif predictedValues[i] == 6 and testingData[i][12] == 6:
             FChordCorrect += 1
-        elif testingValues[i] != 6 and testingData[i][12] == 6:
+        elif predictedValues[i] != 6 and testingData[i][12] == 6:
             falseFChord +=1
-        elif testingValues[i] == 7 and testingData[i][12] == 7:
+        elif predictedValues[i] == 7 and testingData[i][12] == 7:
             GChordCorrect += 1
-        elif testingValues[i] != 7 and testingData[i][12] == 7:
+        elif predictedValues[i] != 7 and testingData[i][12] == 7:
             falseGChord +=1
 
 
@@ -270,5 +270,5 @@ if __name__ == '__main__':
     actualValues = []
     for i in range(len(testingData)):
         actualValues.append(testingData[i][12])
-    print(testingResults(testingValues, actualValues))
+    print(testingResults(actualValues, predictedValues))
 
