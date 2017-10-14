@@ -1,47 +1,45 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-var formidable = require('formidable');
+var formidable = require('formidable'); // file transfer
 var fs = require('fs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res){
-  res.sendFile(path.join(__dirname, 'views/index.html'));
+    res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
 app.post('/upload', function(req, res){
+    // create an incoming form object
+    var form = new formidable.IncomingForm();
 
-  // create an incoming form object
-  var form = new formidable.IncomingForm();
+    // we only want to let the user upload one file
+    form.multiples = false;
 
-  // specify that we want to allow the user to upload multiple files in a single request
-  form.multiples = true;
+    // store all uploads in the uploads dir
+    form.uploadDir = path.join(__dirname, '/uploads');
 
-  // store all uploads in the /uploads directory
-  form.uploadDir = path.join(__dirname, '/uploads');
+    // every time a file has been uploaded successfully, save it as test.wav
+    form.on('file', function(field, file) {
+        fs.rename(file.path, path.join(form.uploadDir, "test.wav"));
+    });
 
-  // every time a file has been uploaded successfully,
-  // rename it to it's orignal name
-  form.on('file', function(field, file) {
-    fs.rename(file.path, path.join(form.uploadDir, file.name));
-  });
+    // log any errors that occur
+    form.on('error', function(err) {
+        console.log('An error has occured: \n' + err);
+    });
 
-  // log any errors that occur
-  form.on('error', function(err) {
-    console.log('An error has occured: \n' + err);
-  });
+    // once all the file has been uploaded let the client know
+    form.on('end', function() {
+        res.end('success');
+    });
 
-  // once all the files have been uploaded, send a response to the client
-  form.on('end', function() {
-    res.end('success');
-  });
-
-  // parse the incoming request containing the form data
-  form.parse(req);
-
+    // parse the incoming request containing the form data
+    form.parse(req);
 });
 
+// have server listen on port 3000
 var server = app.listen(3000, function(){
-  console.log('Server listening on port 3000');
+    console.log('Server listening on port 3000');
 });
