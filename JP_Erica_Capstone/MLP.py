@@ -73,5 +73,14 @@ class MLP(object):
     def getHiddenBiases(self):
         return self.sess.run(self.weights['b2'])
 
+    def saveTensor(self):
+        saver = tf.train.Saver()
+        saver.save(self.sess, 'C:\JP_Erica_Capstone\JP_Erica_Capstone/my-tensor-model.ckpt')
+        
+    def restoreTensor(self):
+        saver = tf.train.Saver()
+        return saver.restore(self.sess, 'C:\JP_Erica_Capstone\JP_Erica_Capstone/my-tensor-model.ckpt')
+        
+
     'Uncomment to Look at Graph and Nodes'
     #print(tf.get_default_graph().as_graph_def())
