@@ -116,7 +116,7 @@ def trainNetwork(data):
     network = net.MLP(12, 9)
     #np.random.shuffle(data)
     losses = []
-    for i in range(25):
+    for i in range(50):
         midLosses = []
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
@@ -204,7 +204,7 @@ if __name__ == '__main__':
     EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 5)),5)
     FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 6)),6)
     GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 7)),7)
-    #TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
     TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
     #TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
     

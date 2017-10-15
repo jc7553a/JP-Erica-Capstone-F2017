@@ -3,7 +3,6 @@ import math
 import HPCP as HPCP
 import os
 
-'''BASICALLY OUR NEURAL NETWORK AS A DICTIONARY'''
 myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.76013899,   0.77143258,
        -3.57863641, -10.41831493,   2.58790898,   2.19516683],
      [ -3.04577971,  -2.60280824,  -1.73133159,  -2.58085465,  -3.33878398,
@@ -44,13 +43,9 @@ myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.7601389
 
     "hiddenBias" :[ 1.27858722]}
 
-
-'''Activation Function for Neural Net'''
 def sigmoid(x):
     return 1/(1+math.exp(-x))
 
-
-'''Simple Function to Grab Wav File from Path and return it'''
 def getData():
     path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles'
     
@@ -62,7 +57,6 @@ def getData():
         TestSong.append(holder)
     return TestSong
 
-'''Run Wav through Harmonic Pitch Class Profile'''
 def getChroma(files, val):
     totalChroma = []
     for i in range(len(files)):
@@ -77,7 +71,6 @@ def cleanUpChroma(chromaGiven):
         chromaBack2.append(chromaBack[i][~(chromaBack[i]==0).all(1)])
     return chromaBack2
 
-'''Pointless Method for This but Let it be for now'''
 def addClassification(chromaGiven, val):
     chromaBack = []
     shape = np.shape(chromaGiven)
@@ -90,11 +83,10 @@ def addClassification(chromaGiven, val):
             chromaBack.append(holder)
     return chromaBack
 
-
-'''Essentially Making Predictions Through Network'''
 def testNetwork(testingDataGiven):
     global myValues
     values = []
+    
     for i in range(len(testingDataGiven)):
         vector = testingDataGiven[i][0:12]
         hidden = np.add(np.matmul(vector, myValues.get("Weights")), myValues.get("Biases"))
@@ -118,10 +110,9 @@ def testNetwork(testingDataGiven):
             threshedValues.append(6)
         elif values[i] > 6.5:
             threshedValues.append(7)
+    
     return threshedValues
 
-
-'''Simple Function to Find the index of Max Val in Array'''
 def findMaxIndex(listGiven):
     maxNum = 0
     maxIndex = 0
@@ -131,8 +122,6 @@ def findMaxIndex(listGiven):
             maxIndex = j
     return maxIndex
 
-
-'''Finds Which Chord Shows up the Most in a Given Array'''
 def findMajority(listGiven):
     myArray = [0,0,0,0,0,0,0]
     for i in range(len(listGiven)):
@@ -150,11 +139,10 @@ def findMajority(listGiven):
             myArray[5] +=1
         elif listGiven[i] == 7:
             myArray[6] +=1
+    print(myArray)
     majorityLeader = findMaxIndex(myArray)
     return majorityLeader+1
 
-
-'''Just Converts Number to A String'''
 def numberToChord(number):
     if number == 1:
         return "A"
@@ -178,14 +166,10 @@ if __name__ == '__main__':
     TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
     TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
     predictedValues = testNetwork(TestChroma1)
-    
-    '''Prints Chord of 1st Wav file'''
     print(numberToChord(findMajority(predictedValues)))
     predictedValues = testNetwork(TestChroma2)
-    '''Prints 2nd WAv File Chord'''
     print(numberToChord(findMajority(predictedValues)))
     predictedValues = testNetwork(TestChroma3)
-    '''Prints 3rd Wav File Chord'''
     print(numberToChord(findMajority(predictedValues)))
     
     

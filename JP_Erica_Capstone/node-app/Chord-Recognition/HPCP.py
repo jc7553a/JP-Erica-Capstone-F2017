@@ -22,7 +22,7 @@ def hpcp(file_name,
          pathVal,
          win_size=4096,
          hop_size=1024,
-         window= 'hann',
+         window= 'hamming',
          precision='float32',
          f_min=100,
          f_max=5000,
@@ -33,7 +33,7 @@ def hpcp(file_name,
          filter_width=1/3.,  # in octaves
          harmonic_decay=0.6,
          harmonic_tolerance=2/3.,  # in semitones
-         norm_frames=False,
+         norm_frames=True,
          final_thr=0.,
          output='list'):
     """ Compute Harmonic Pitch Class Profile (HPCP) features.
@@ -94,7 +94,9 @@ def hpcp(file_name,
     if pathVal == 7:
         os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord')
     if pathVal == 8:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles')
+    
+    
     
 
     # spectrogram
@@ -149,7 +151,7 @@ def read_audio(file_name):
     return y, sr
 
 
-def stft(x, sr, win_size=4096, hop_size=1024, window='hann', precision='float32'):
+def stft(x, sr, win_size=4096, hop_size=1024, window='hamming', precision='float32'):
     """ Short-Time Fourier Transform
     Wrapper on scipy.signal.spectrogram
     :param x: signal
