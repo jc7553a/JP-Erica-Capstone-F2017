@@ -9,7 +9,8 @@ from scipy.signal import spectrogram, convolve2d
 import json
 import sys
 import os
-
+import warnings
+warnings.filterwarnings("ignore")
 '''
 def main():
     """Compute Harmonic Pitch Class Profile (HPCP) features.
@@ -94,7 +95,7 @@ def hpcp(file_name,
     if pathVal == 7:
         os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord')
     if pathVal == 8:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
     
     
     

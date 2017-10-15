@@ -116,14 +116,14 @@ def trainNetwork(data):
     network = net.MLP(12, 9)
     #np.random.shuffle(data)
     losses = []
-    for i in range(50):
+    for i in range(5):
         midLosses = []
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
             midLosses.append(network.train([data[rand][0:12]], [[data[rand][12]]]))
         losses.append(np.average(midLosses))
-    plt.plot(losses)
-    plt.show()
+    #plt.plot(losses)
+    #plt.show()
     print("Done Training")
     return network
 
@@ -280,12 +280,12 @@ if __name__ == '__main__':
     #print(findMajority(predictedValues))
     
     i = 0
-    while i < (len(predictedValues)-30):
+    while i < (len(predictedValues)-50):
         if i ==0:
             chord = 1
             sp = 1
         else:
-            temp = findMajority(predictedValues[i:i+30])
+            temp = findMajority(predictedValues[i:i+50])
             if chord != temp:
                 chord = temp
                 sp = 1
@@ -306,7 +306,7 @@ if __name__ == '__main__':
                 print("G")
         sp = 0
         
-        i+=30
+        i+=50
                              
 
     #neuralNetwork.saveTensor() 

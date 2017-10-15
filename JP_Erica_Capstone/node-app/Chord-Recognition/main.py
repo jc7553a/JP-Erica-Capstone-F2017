@@ -3,6 +3,8 @@ import math
 import HPCP as HPCP
 import os
 
+
+'''Our Neural Network HardCoded'''
 myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.76013899,   0.77143258,
        -3.57863641, -10.41831493,   2.58790898,   2.19516683],
      [ -3.04577971,  -2.60280824,  -1.73133159,  -2.58085465,  -3.33878398,
@@ -43,12 +45,15 @@ myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.7601389
 
     "hiddenBias" :[ 1.27858722]}
 
+
+'''Our Activation Function For Neural Network'''
 def sigmoid(x):
     return 1/(1+math.exp(-x))
 
+
+'''Get's Wav File From Path'''
 def getData():
-    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles'
-    
+    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
     TestSong = []
     for filename in os.listdir(path8):
         holder = []
@@ -57,6 +62,8 @@ def getData():
         TestSong.append(holder)
     return TestSong
 
+
+'''Gets Harmonic Pitch Class Profile'''
 def getChroma(files, val):
     totalChroma = []
     for i in range(len(files)):
@@ -71,6 +78,8 @@ def cleanUpChroma(chromaGiven):
         chromaBack2.append(chromaBack[i][~(chromaBack[i]==0).all(1)])
     return chromaBack2
 
+
+'''Pointless Function but let it be'''
 def addClassification(chromaGiven, val):
     chromaBack = []
     shape = np.shape(chromaGiven)
@@ -83,10 +92,11 @@ def addClassification(chromaGiven, val):
             chromaBack.append(holder)
     return chromaBack
 
+
+'''Runs our HPCP Through the Neural Network'''
 def testNetwork(testingDataGiven):
     global myValues
     values = []
-    
     for i in range(len(testingDataGiven)):
         vector = testingDataGiven[i][0:12]
         hidden = np.add(np.matmul(vector, myValues.get("Weights")), myValues.get("Biases"))
@@ -110,9 +120,10 @@ def testNetwork(testingDataGiven):
             threshedValues.append(6)
         elif values[i] > 6.5:
             threshedValues.append(7)
-    
     return threshedValues
 
+
+'''Find Index that has Max Value in Array'''
 def findMaxIndex(listGiven):
     maxNum = 0
     maxIndex = 0
@@ -122,6 +133,8 @@ def findMaxIndex(listGiven):
             maxIndex = j
     return maxIndex
 
+
+'''Finds Which Chord Occurs Most Frequently'''
 def findMajority(listGiven):
     myArray = [0,0,0,0,0,0,0]
     for i in range(len(listGiven)):
@@ -139,10 +152,10 @@ def findMajority(listGiven):
             myArray[5] +=1
         elif listGiven[i] == 7:
             myArray[6] +=1
-    print(myArray)
     majorityLeader = findMaxIndex(myArray)
     return majorityLeader+1
 
+'''Converts Number Found in Find Majority to a Chord Letter'''
 def numberToChord(number):
     if number == 1:
         return "A"
@@ -161,15 +174,48 @@ def numberToChord(number):
 
 
 if __name__ == '__main__':
+    ''' Get Data'''
     TestChord= getData()
+
+    '''Run it Through Harmonic Pitch Class Profile'''
     TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
-    TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
-    TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
+    
+    '''Run it Through Neural Network'''
     predictedValues = testNetwork(TestChroma1)
-    print(numberToChord(findMajority(predictedValues)))
-    predictedValues = testNetwork(TestChroma2)
-    print(numberToChord(findMajority(predictedValues)))
-    predictedValues = testNetwork(TestChroma3)
-    print(numberToChord(findMajority(predictedValues)))
     
-    
+    '''Checking the Results'''
+    '''Hacky Check If it's longer than 700 than chances are it's multiple Chords'''
+    '''The Smaller the Length prob means it's a single Chord'''
+    if len(TestChroma1) > 700:
+        i = 0
+        sp = 0
+        chord = 0
+        while i < (len(predictedValues)-47):
+            sp = 0
+            if i ==0:
+                chord = findMajority(predictedValues[i:i+20])
+                sp = 1
+            else:
+                temp = findMajority(predictedValues[i:i+47])
+                if chord != temp:
+                    chord = temp
+                    sp = 1
+            if sp ==1:
+                if chord == 1:
+                    print("A")
+                if chord == 2:
+                    print("B")
+                if chord == 3:
+                    print("C")
+                if chord == 4:
+                    print("D")
+                if chord == 5:
+                    print("E")
+                if chord == 6:
+                    print("F")
+                if chord == 7:
+                    print("G")
+            sp = 0
+            i+=47
+    else:
+        print(numberToChord(findMajority(predictedValues)))
