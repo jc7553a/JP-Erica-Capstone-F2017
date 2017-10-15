@@ -18,7 +18,7 @@ app.post('/upload', function(req, res){
     form.multiples = false;
 
     // store all uploads in the uploads dir
-    form.uploadDir = path.join(__dirname, '/uploads');
+    form.uploadDir = path.join(__dirname, 'Chord-Recognition/Data/Uploads');
 
     // every time a file has been uploaded successfully, save it as test.wav
     form.on('file', function(field, file) {
