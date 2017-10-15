@@ -1,86 +1,68 @@
-import matplotlib.pyplot as plt
-from scipy.io import wavfile as wav
-from scipy.fftpack import fft
 import numpy as np
-import HPCP as HPCP
-import MLP as net
-import random as ra
 import math
-import sys
+import HPCP as HPCP
 import os
-import matplotlib.pylab as plt
-from random import randint
-import pandas as pd
 
+myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.76013899,   0.77143258,
+       -3.57863641, -10.41831493,   2.58790898,   2.19516683],
+     [ -3.04577971,  -2.60280824,  -1.73133159,  -2.58085465,  -3.33878398,
+        5.49133348,  10.37589455,  -3.32649541,  -3.88968325],
+     [ -2.99838901,   1.13549161,  -7.24953842, -10.32991505,  -3.87962413,
+      -12.81757641,   7.27493429,   2.22906208,  18.84435844],
+     [ -3.960428,    -2.64069605,  -4.6558814,   -0.80620283,  -4.09178162,
+       -7.22601604,   7.41209221,  -0.73860425,  -6.28695917],
+     [ -6.08905315,  -3.24493837,  -6.38586378,  -0.72087651,  -6.53085709,
+       -8.1195097,    2.45569777,  -0.45266038,  -2.60400534],
+     [ -3.07358646,  -3.13332224,  -1.37454772,   9.08749104,  -2.75056839,
+       -1.02353573, -13.40280342,  -3.36011529,  -3.52689719],
+     [  1.85643816,   3.7503438,   -2.07958126,   0.91555011,   2.46813178,
+       -4.68322325,  -3.29586363,   5.91936541,   5.27369642],
+     [  0.80757564,  -0.75285047,   1.29191494,   2.20938015,   0.32239756,
+       -3.66530895,  -0.37317574,  -1.79141235,   2.03516078],
+     [ -2.3198545,   -1.63475239,  -2.99360085,   5.4830265,   -2.34922004,
+       -3.71514416, -13.31292725,  -1.91707003,   4.93871689],
+     [ -4.36809301,  -3.71500564,   2.53857374,   4.45831919,  -6.51977396,
+        1.73498857, -27.43795776,  -7.5555377,    1.10429311],
+     [ -2.66566992,  -2.46926045,  -2.35029268,   2.64521575,  -2.78282809,
+       -3.20256853,   3.07838535,  -2.00939775,  -9.31940842],
+     [ -8.90785599,  -8.21330547,  -8.68538666,   1.83948112, -10.51830959,
+      -16.28369331,  -0.3287681,   -9.55752659,   0.91085398]],
+
+    "Biases": [-2.80140018, -5.25328827, -1.32360482, -9.0696249,  -2.18938375,  3.57379103,
+     -0.27621222, -5.23886108, -4.83810806],
+
+    "hiddenWeights": [[ 3.77329278],
+     [ 2.41901088],
+     [ 4.0241046 ],
+     [ 4.59296274],
+     [ 4.60128307],
+     [ 1.67480576],
+     [ 3.7662282 ],
+     [ 2.9760673 ],
+     [ 2.80536699]],
+
+    "hiddenBias" :[ 1.27858722]}
+
+def sigmoid(x):
+    return 1/(1+math.exp(-x))
 
 def getData():
-    path = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord'
-    path2 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\BChord'
-    path3 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\CChord'
-    path4 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord'
-    path5 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\EChord'
-    path6 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\FChord'
-    path7 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord'
-
-    AMajor = []
-    for filename in os.listdir(path):
+    path8 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\TestingFiles'
+    
+    TestSong = []
+    for filename in os.listdir(path8):
         holder = []
         holder.append(filename)
         holder.append([1])
-        AMajor.append(holder)
-        
-    BMajor = []
-    for filename in os.listdir(path2):
-        holder = []
-        holder.append(filename)
-        holder.append([1])
-        BMajor.append(holder)
+        TestSong.append(holder)
+    return TestSong
 
-    CMajor = []
-    for filename in os.listdir(path3):
-        holder = []
-        holder.append(filename)
-        holder.append([1])
-        CMajor.append(holder)
-
-    DMajor = []
-    for filename in os.listdir(path4):
-        holder = []
-        holder.append(filename)
-        holder.append([2])
-        DMajor.append(holder)
-
-    EMajor = []
-    for filename in os.listdir(path5):
-        holder = []
-        holder.append(filename)
-        holder.append([1])
-        EMajor.append(holder)
-
-    FMajor = []
-    for filename in os.listdir(path6):
-        holder = []
-        holder.append(filename)
-        holder.append([1])
-        FMajor.append(holder)
-
-    GMajor = []
-    for filename in os.listdir(path7):
-        holder = []
-        holder.append(filename)
-        holder.append([3])
-        GMajor.append(holder)
-        
-    return AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor
-
-
-'''Running Harmonic Pitch Class Profile on Training Data'''
 def getChroma(files, val):
     totalChroma = []
     for i in range(len(files)):
         totalChroma.append(HPCP.hpcp(files[0][0], val))
     return totalChroma
-                           
+
 '''Gets rid of Rows of 0's'''
 def cleanUpChroma(chromaGiven):
     chromaBack = np.array(chromaGiven)
@@ -89,8 +71,6 @@ def cleanUpChroma(chromaGiven):
         chromaBack2.append(chromaBack[i][~(chromaBack[i]==0).all(1)])
     return chromaBack2
 
-'''This is Wicked Dumb need to find a new way to append vals to end of
-    Numpy Array'''
 def addClassification(chromaGiven, val):
     chromaBack = []
     shape = np.shape(chromaGiven)
@@ -98,37 +78,29 @@ def addClassification(chromaGiven, val):
         for j in range(shape[1]):
             holder = []
             for t in range(shape[2]):
-                holder.append(chromaGiven[i][j][t]*100)
+                holder.append(chromaGiven[i][j][t])
             holder.append(val)
             chromaBack.append(holder)
     return chromaBack
 
-'''Train Neural Network'''
-def trainNetwork(data):
-    print("Training Network....")
-    network = net.MLP(12, 9)
-    np.random.shuffle(data)
-    for i in range(6):
-        for j in range(len(data)):
-            rand = randint(0, len(data)-1)
-            network.train([data[rand][0:12]], [[data[rand][12]]])
-    print("Done Training")
-    return network
-
-
-'''Testing Network'''        
-def testNetwork(network, testingDataGiven):
+def testNetwork(testingDataGiven):
+    global myValues
     values = []
-    print("Testing Values...")
+    
     for i in range(len(testingDataGiven)):
-        values.append(network.calc_total_cost([testingDataGiven[i][0:12]], [[0]]))
+        vector = testingDataGiven[i][0:12]
+        hidden = np.add(np.matmul(vector, myValues.get("Weights")), myValues.get("Biases"))
+        for i in range (len(hidden)):
+            hidden[i] = sigmoid(hidden[i])
+        output = (np.add(np.matmul(hidden, myValues.get("hiddenWeights")), myValues.get("hiddenBias")))
+        values.append(output)
     threshedValues = []
     for i in range(len(values)):
-        if values[i] <= 1.6:
+        if values[i] <= 1.5:
             threshedValues.append(1)
-        elif values[i] > 1.6 and values[i] <= 2.7:
+        elif values[i] > 1.5 and values[i] <= 2.5:
             threshedValues.append(2)
-        elif values[i] > 2.7 and values[i]<= 3.5:
+        elif values[i] > 2.5 and values[i]<= 3.5:
             threshedValues.append(3)
         elif values[i] > 3.5 and  values[i]<= 4.5:
             threshedValues.append(4)
@@ -138,137 +110,65 @@ def testNetwork(network, testingDataGiven):
             threshedValues.append(6)
         elif values[i] > 6.5:
             threshedValues.append(7)
-    print("Done Testing")
+    
     return threshedValues
 
+def findMaxIndex(listGiven):
+    maxNum = 0
+    maxIndex = 0
+    for j in range(len(listGiven)):
+        if listGiven[j] > maxNum:
+            maxNum = listGiven[j]
+            maxIndex = j
+    return maxIndex
 
-def testingResults(actual, predicted):
-    y_pred = pd.Series(predicted, name = 'Predicted')
-    y_act = pd.Series(actual, name = 'Actual')
-    df_confusion = pd.crosstab(y_act, y_pred, rownames = ['Actual'], colnames = ['Predicted'], margins = True)
-    return df_confusion
+def findMajority(listGiven):
+    myArray = [0,0,0,0,0,0,0]
+    for i in range(len(listGiven)):
+        if listGiven[i] == 1:
+            myArray[0] +=1
+        elif listGiven[i] == 2:
+            myArray[1] +=1
+        elif listGiven[i] == 3:
+            myArray[2] +=1
+        elif listGiven[i] == 4:
+            myArray[3] +=1
+        elif listGiven[i] == 5:
+            myArray[4] +=1
+        elif listGiven[i] == 6:
+            myArray[5] +=1
+        elif listGiven[i] == 7:
+            myArray[6] +=1
+    majorityLeader = findMaxIndex(myArray)
+    return majorityLeader+1
 
-                      
-    
-    
+def numberToChord(number):
+    if number == 1:
+        return "A"
+    elif number == 2:
+        return "B"
+    elif number == 3:
+        return "C"
+    elif number == 4:
+        return "D"
+    elif number == 5:
+        return "E"
+    elif number == 6:
+        return "F"
+    elif number == 7:
+        return "G"
+
 
 if __name__ == '__main__':
-    AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor = getData()
-    AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
-    BChroma = addClassification(cleanUpChroma(getChroma(BMajor, 2)),2)
-    CChroma = addClassification(cleanUpChroma(getChroma(CMajor, 3)),3)
-    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 4)),4)
-    EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 5)),5)
-    FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 6)),6)
-    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 7)),7)
-    
-
-    '''Concatenating All Matrices Together
-       From Above to Create One Data Set'''
-    totalData = np.concatenate((np.array(AChroma), np.array(BChroma)))
-    totalData = np.concatenate((totalData, np.array(CChroma)))
-    totalData = np.concatenate((totalData, np.array(DChroma)))
-    totalData = np.concatenate((totalData, np.array(EChroma)))
-    totalData = np.concatenate((totalData, np.array(FChroma)))
-    totalData = np.concatenate((totalData, np.array(GChroma)))
-    print(len(totalData))
-
-
-    '''Choosing Random Samples to Test on
-       Then Deleting them from Training'''
-    testingData = []    
-    for i in range(300):
-        rand = randint(0, len(totalData)-1)
-        testingData.append(totalData[rand][:])
-        totalData = np.delete(totalData,(rand), axis = 0)
+    TestChord= getData()
+    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
+    TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
+    predictedValues = testNetwork(TestChroma1)
+    print(numberToChord(findMajority(predictedValues)))
+    predictedValues = testNetwork(TestChroma2)
+    print(numberToChord(findMajority(predictedValues)))
+    predictedValues = testNetwork(TestChroma3)
+    print(numberToChord(findMajority(predictedValues)))
     
     
-    testingData = np.array(testingData)
-    '''Train Network'''
-    neuralNetwork = trainNetwork(totalData)
-
-    '''Test Network'''
-    predictedValues = testNetwork(neuralNetwork, testingData)
-
-    
-    falseAChord = 0
-    AChordCorrect = 0
-    falseBChord = 0
-    BChordCorrect = 0
-    falseCChord = 0
-    CChordCorrect = 0
-    falseDChord = 0
-    DChordCorrect = 0
-    falseEChord = 0
-    EChordCorrect = 0
-    falseFChord = 0
-    FChordCorrect = 0
-    falseGChord = 0
-    GChordCorrect = 0
-    actual = []
-
-    for i in range(len(predictedValues)):
-        if predictedValues[i] == 1 and testingData[i][12] == 1:
-            AChordCorrect += 1
-        elif predictedValues[i] != 1 and testingData[i][12] == 1:
-            falseAChord += 1
-        elif predictedValues[i] == 2 and testingData[i][12] == 2:
-            BChordCorrect += 1
-        elif predictedValues[i] != 2 and testingData[i][12] == 2:
-            falseBChord +=1
-        elif predictedValues[i] == 3 and testingData[i][12] == 3:
-            CChordCorrect += 1
-        elif predictedValues[i] != 3 and testingData[i][12] == 3:
-            falseCChord +=1
-        elif predictedValues[i] == 4 and testingData[i][12] == 4:
-            DChordCorrect += 1
-        elif predictedValues[i] != 4 and testingData[i][12] == 4:
-            falseDChord +=1
-        elif predictedValues[i] == 5 and testingData[i][12] == 5:
-            EChordCorrect += 1
-        elif predictedValues[i] != 5 and testingData[i][12] == 5:
-            falseEChord +=1
-        elif predictedValues[i] == 6 and testingData[i][12] == 6:
-            FChordCorrect += 1
-        elif predictedValues[i] != 6 and testingData[i][12] == 6:
-            falseFChord +=1
-        elif predictedValues[i] == 7 and testingData[i][12] == 7:
-            GChordCorrect += 1
-        elif predictedValues[i] != 7 and testingData[i][12] == 7:
-            falseGChord +=1
-
-
-    print("AChord Tests")
-    print(falseAChord)
-    print(AChordCorrect)
-    print("BChord Tests")
-    print(falseBChord)
-    print(BChordCorrect)
-    print("CChord Tests")
-    print(falseCChord)
-    print(CChordCorrect)
-    print("DChord Tests")
-    print(falseDChord)
-    print(DChordCorrect)
-    print("EChord Tests")
-    print(falseEChord)
-    print(EChordCorrect)
-    print("FChord Tests")
-    print(falseFChord)
-    print(FChordCorrect)
-    print("GChord Tests")
-    print(falseGChord)
-    print(GChordCorrect)
-
-            
-    totalCorrect= AChordCorrect + BChordCorrect + CChordCorrect + DChordCorrect + EChordCorrect + FChordCorrect + GChordCorrect
-    total = totalCorrect +(falseAChord + falseBChord + falseCChord+ falseDChord + falseEChord + falseFChord + falseGChord)
-    print("")
-    print("Accuracy")
-    print(float(totalCorrect/total))
-
-    actualValues = []
-    for i in range(len(testingData)):
-        actualValues.append(testingData[i][12])
-    print(testingResults(actualValues, predictedValues))
-
