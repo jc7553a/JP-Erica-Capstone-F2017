@@ -80,19 +80,21 @@ def hpcp(file_name,
     Retrieved from http://recherche.ircam.fr/pub/dafx11/Papers/14_e.pdf
     """
     if pathVal == 1:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/AChord')
     if pathVal == 2:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\BChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord')
     if pathVal == 3:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\CChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/CChord')
     if pathVal == 4:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/DChord')
     if pathVal == 5:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\EChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/EChord')
     if pathVal == 6:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\FChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/FChord')
     if pathVal == 7:
-        os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord')
+    if pathVal == 8:
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
     
 
     # spectrogram

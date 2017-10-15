@@ -12,14 +12,14 @@ from sklearn.metrics import roc_auc_score, roc_curve
 
 
 def getData():
-    path = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\AChord'
-    path2 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\BChord'
-    path3 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\CChord'
-    path4 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\DChord'
-    path5 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\EChord'
-    path6 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\FChord'
-    path7 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\GChord'
-    path8 = 'C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\TestingFiles'
+    path = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord'
+    path2 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord'
+    path3 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/CChord'
+    path4 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/DChord'
+    path5 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/EChord'
+    path6 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/FChord'
+    path7 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord'
+    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
 
     AMajor = []
     TestSong = []
@@ -116,7 +116,7 @@ def trainNetwork(data):
     network = net.MLP(12, 9)
     #np.random.shuffle(data)
     losses = []
-    for i in range(5):
+    for i in range(25):
         midLosses = []
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
@@ -195,7 +195,7 @@ def findMajority(listGiven):
 
 if __name__ == '__main__':
     AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor, TestChord= getData()
-    print(TestChord)
+    print(TestChord[1][:])
     
     AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
     BChroma = addClassification(cleanUpChroma(getChroma(BMajor, 2)),2)
@@ -204,9 +204,9 @@ if __name__ == '__main__':
     EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 5)),5)
     FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 6)),6)
     GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 7)),7)
-    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    #TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
     TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
-    TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
+    #TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
     
         
     
@@ -238,12 +238,8 @@ if __name__ == '__main__':
     neuralNetwork = trainNetwork(totalData)
 
     '''Test Network'''
-    predictedValues1 = testNetwork(neuralNetwork, TestChroma1)
-    predictedValues2 = testNetwork(neuralNetwork, TestChroma2)
-    predictedValues3 = testNetwork(neuralNetwork, TestChroma3)
-    print(findMajority(predictedValues1))
-    print(findMajority(predictedValues2))
-    print(findMajority(predictedValues3))
+    predictedValues = testNetwork(neuralNetwork, TestChroma2)
+    
 
     '''
     ones = 0
@@ -282,14 +278,14 @@ if __name__ == '__main__':
     '''
 
     #print(findMajority(predictedValues))
-    '''
+    
     i = 0
-    while i < (len(predictedValues)-50):
+    while i < (len(predictedValues)-30):
         if i ==0:
             chord = 1
             sp = 1
         else:
-            temp = findMajority(predictedValues[i:i+50])
+            temp = findMajority(predictedValues[i:i+30])
             if chord != temp:
                 chord = temp
                 sp = 1
@@ -310,8 +306,8 @@ if __name__ == '__main__':
                 print("G")
         sp = 0
         
-        i+=20
-    '''                          
+        i+=30
+                             
 
     #neuralNetwork.saveTensor() 
 
