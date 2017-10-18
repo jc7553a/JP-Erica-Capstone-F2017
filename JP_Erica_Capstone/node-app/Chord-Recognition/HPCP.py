@@ -96,8 +96,8 @@ def hpcp(file_name,
         os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord')
     if pathVal == 8:
         os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
-    
-    
+    if pathVal == 9:
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles')    
     
 
     # spectrogram

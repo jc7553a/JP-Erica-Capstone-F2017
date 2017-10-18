@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 
 
 
-os.chdir('C:\JP_Erica_Capstone\JP_Erica_Capstone\Data\TestSong')
+os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
 
 win_size = 4096
 window = 'hamming'
 hop_size = 1024
 print(win_size - hop_size)
-sr, y = wavfile.read('SR001MS.wav')
+sr, y = wavfile.read('SR001XY.wav')
 x = fft(y)
 
 
@@ -30,6 +30,10 @@ if len(y.shape) > 1:
     # normalize
 y = y/np.max(y)
 
+X = fft(y)
+plt.plot(X)
+plt.show()
+
 f, t, X = spectrogram(y, sr,nperseg = win_size, noverlap = win_size-hop_size ,  window=window)
 
 X = X.astype('float32').T
@@ -41,7 +45,8 @@ newX = []
 for j in range(len(averageX)):
     if averageX[j] > .0000015:
         newX.append(X[j][:])
-plt.plot(X)
+print(np.shape(X))
+plt.plot(X[0][0:100])
 plt.show()
 plt.plot(averageX)
 plt.show()

@@ -2,6 +2,7 @@ import numpy as np
 import math
 import HPCP as HPCP
 import os
+import sys
 
 
 '''Our Neural Network HardCoded'''
@@ -52,15 +53,25 @@ def sigmoid(x):
 
 
 '''Get's Wav File From Path'''
-def getData():
-    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
-    TestSong = []
-    for filename in os.listdir(path8):
-        holder = []
-        holder.append(filename)
-        holder.append([1])
-        TestSong.append(holder)
-    return TestSong
+def getData(num):
+    if num == 1:
+        path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
+        TestSong = []
+        for filename in os.listdir(path8):
+            holder = []
+            holder.append(filename)
+            holder.append([1])
+            TestSong.append(holder)
+        return TestSong
+    if num != 1:
+        path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles'
+        TestSong = []
+        for filename in os.listdir(path8):
+            holder = []
+            holder.append(filename)
+            holder.append([1])
+            TestSong.append(holder)
+        return TestSong
 
 
 '''Gets Harmonic Pitch Class Profile'''
@@ -120,6 +131,8 @@ def testNetwork(testingDataGiven):
             threshedValues.append(6)
         elif values[i] > 6.5:
             threshedValues.append(7)
+        #elif values[i] > 7.8:
+         #   threshedValues.append(8)
     return threshedValues
 
 
@@ -174,29 +187,41 @@ def numberToChord(number):
 
 
 if __name__ == '__main__':
+
+    num = int(sys.argv[1])
+
     ''' Get Data'''
-    TestChord= getData()
+    TestChord= getData(num)
+    
 
     '''Run it Through Harmonic Pitch Class Profile'''
-    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    if num ==1:
+        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    if num ==2:
+        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 9)),0)
+    if num ==3:
+        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 9)),0)
+    if num ==4:
+        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 9)),0)
     
+
     '''Run it Through Neural Network'''
     predictedValues = testNetwork(TestChroma1)
-    
+
     '''Checking the Results'''
     '''Hacky Check If it's longer than 700 than chances are it's multiple Chords'''
     '''The Smaller the Length prob means it's a single Chord'''
-    if len(TestChroma1) > 700:
+    if len(TestChroma1) > 500:
         i = 0
         sp = 0
         chord = 0
-        while i < (len(predictedValues)-47):
+        while i < (len(predictedValues)-35):
             sp = 0
             if i ==0:
                 chord = findMajority(predictedValues[i:i+20])
                 sp = 1
             else:
-                temp = findMajority(predictedValues[i:i+47])
+                temp = findMajority(predictedValues[i-10:i+35])
                 if chord != temp:
                     chord = temp
                     sp = 1
@@ -216,6 +241,6 @@ if __name__ == '__main__':
                 if chord == 7:
                     print("G")
             sp = 0
-            i+=47
+            i+=35
     else:
         print(numberToChord(findMajority(predictedValues)))
