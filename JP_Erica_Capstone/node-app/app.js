@@ -16,6 +16,27 @@ app.get('/', function(req, res){
 });
 
 app.post('/upload', function(req, res){
+    var kickoff = function(data){
+        /// function to kickoff python script using child_process mod
+        var dataString = ""
+        // converts data to string and then send it to python script
+        py.stdout.on('data', function(data){
+            dataString += data.toString();
+        });
+        py.stdout.on('end', function(){
+            console.log('Test:',dataString);
+            alertSuccess(dataString);
+        });
+        py.stdin.write(JSON.stringify(data));
+        py.stdin.end();
+    }
+    
+    var alertSuccess = function(dataString){
+        console.log("alertSuccess");
+        successJSONString = "{\"success\" : \"" + dataString.toString() +  "\", \"status\" : 200}";
+        res.end(successJSONString);  
+    }
+
     // create an incoming form object
     var form = new formidable.IncomingForm();
 
@@ -29,8 +50,6 @@ app.post('/upload', function(req, res){
     form.on('file', function(field, file) {
         // save file as test.wav
         fs.rename(file.path, path.join(form.uploadDir, "test.wav"));
-        // send file path of this wav to python script
-        kickoff("filepathhere");
     });
 
     // log any errors that occur
@@ -40,26 +59,12 @@ app.post('/upload', function(req, res){
 
     // once all the file has been uploaded let the client know
     form.on('end', function() {
-        res.end('success');
+        kickoff("/Data/Uploads/test.wav");
     });
 
     // parse the incoming request containing the form data
     form.parse(req);
 });
-
-var kickoff = function(data){
-    /// function to kickoff python script using child_process mod
-    dataString = ""
-    // converts data to string and then send it to python script
-    py.stdout.on('data', function(data){
-        dataString += data.toString();
-    });
-    py.stdout.on('end', function(){
-        console.log('Test:',dataString);
-    });
-    py.stdin.write(JSON.stringify(data));
-    py.stdin.end();
-}
 
 // have server listen on port 3000
 var server = app.listen(3000, function(){

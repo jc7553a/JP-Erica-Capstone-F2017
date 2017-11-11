@@ -22,8 +22,14 @@ $('#upload-input').on('change', function(){
       data: formData,
       processData: false,
       contentType: false,
-      success: function(data){
-          console.log('upload successful!\n' + data);
+      success: function (result) {
+        console.log(result);
+        if(result.status == 200){
+            self.isEditMode(!self.isEditMode());
+        }
+        },
+        error: function(result){
+            console.log(result);
       },
       xhr: function() {
         // create an XMLHttpRequest
