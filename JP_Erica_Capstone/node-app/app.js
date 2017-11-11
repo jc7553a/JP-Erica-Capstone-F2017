@@ -3,6 +3,11 @@ var app = express();
 var path = require('path');
 var formidable = require('formidable'); // file transfer
 var fs = require('fs');
+var spawn = require('child_process').spawn;
+var py = spawn('python', ['helloworld.py']);
+
+var data = "Erica and JP";
+var dataString = '';
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -22,7 +27,10 @@ app.post('/upload', function(req, res){
 
     // every time a file has been uploaded successfully, save it as test.wav
     form.on('file', function(field, file) {
+        // save file as test.wav
         fs.rename(file.path, path.join(form.uploadDir, "test.wav"));
+        // send file path of this wav to python script
+        kickoff("filepathhere");
     });
 
     // log any errors that occur
@@ -38,6 +46,20 @@ app.post('/upload', function(req, res){
     // parse the incoming request containing the form data
     form.parse(req);
 });
+
+var kickoff = function(data){
+    /// function to kickoff python script using child_process mod
+    dataString = ""
+    // converts data to string and then send it to python script
+    py.stdout.on('data', function(data){
+        dataString += data.toString();
+    });
+    py.stdout.on('end', function(){
+        console.log('Test:',dataString);
+    });
+    py.stdin.write(JSON.stringify(data));
+    py.stdin.end();
+}
 
 // have server listen on port 3000
 var server = app.listen(3000, function(){
