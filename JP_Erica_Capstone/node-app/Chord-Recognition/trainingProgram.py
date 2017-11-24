@@ -32,7 +32,7 @@ def getData():
     path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/em'
     path9 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/f'
     path10 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/g'
-    path11 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
+    #path11 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
 
     AMajor = []
     TestSong = []
@@ -106,12 +106,13 @@ def getData():
         GMajor.append(holder)
     
     TestSong = []
+    '''
     for filename in os.listdir(path11):
         holder = []
         holder.append(filename)
         holder.append([1])
         TestSong.append(holder)
-        
+    '''
     return AMajor, AMinor, BMinor, CMajor, DMajor, DMinor, EMajor, EMinor, FMajor, GMajor, TestSong
 
 
@@ -228,10 +229,10 @@ def findMajority(listGiven):
     return majorityLeader+1
     
 def batchTraining(A, Am, Bm, C, D, Dm, E, Em, F, G):
-    network = net.MLP(12, 9, 7)
+    network = net.MLP(12, 35, 12)
     losses = []
-    batchSize = 5
-    for j in range(800):
+    batchSize = 120
+    for j in range(400):
         midLosses = []
         for i in range(500):
             chord = randint(0,9)
@@ -309,7 +310,7 @@ if __name__ == '__main__':
     #TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
     #TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
     #TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
-
+    print(len(AChroma))
     
         
     

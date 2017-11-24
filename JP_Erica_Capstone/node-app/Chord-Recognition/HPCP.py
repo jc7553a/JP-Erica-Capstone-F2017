@@ -81,23 +81,27 @@ def hpcp(file_name,
     Retrieved from http://recherche.ircam.fr/pub/dafx11/Papers/14_e.pdf
     """
     if pathVal == 1:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/AChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/a')
     if pathVal == 2:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/am')
     if pathVal == 3:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/CChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/bm')
     if pathVal == 4:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/DChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/c')
     if pathVal == 5:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/EChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/d')
     if pathVal == 6:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/FChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/dm')
     if pathVal == 7:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/e')
     if pathVal == 8:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong')
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/em')
     if pathVal == 9:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles')    
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/f')
+    if pathVal == 10:
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/g')
+    if pathVal == 11:
+        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads')    
     
 
     # spectrogram
