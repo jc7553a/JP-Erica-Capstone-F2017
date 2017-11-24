@@ -7,11 +7,12 @@ class MLP(object):
     '''The output right now is 2 Values'''
     '''I think you should try to reduce a mean value hence 2 ouput values'''
 
-    def __init__(self, n_features, n_hidden):
+    def __init__(self, n_features, n_hidden, n_hidden2):
         '''Number of Inputs and Number of Hidden units'''
         ''' One Hidden Layer in this Network'''
         self.n_features = n_features
         self.n_hidden = n_hidden
+        self.n_hidden2 = n_hidden2
         #self.transfer = transfer_function
 
         network_weights = self._initialize_weights()
@@ -21,7 +22,8 @@ class MLP(object):
         self.x = tf.placeholder(tf.float32, [None, self.n_features])
         
         self.hidden = tf.nn.sigmoid(tf.add(tf.matmul(self.x, self.weights['w1']), self.weights['b1']))
-        self.finish = tf.add(tf.matmul(self.hidden, self.weights['w2']), self.weights['b2'])
+        self.hidden2 = tf.nn.sigmoid(tf.add(tf.matmul(self.hidden, self.weights['w2']), self.weights['b2']))
+        self.finish = tf.add(tf.matmul(self.hidden2, self.weights['w3']), self.weights['b3'])
 
         # cost
         self.y = tf.placeholder(tf.float32, [None,1])
@@ -40,7 +42,9 @@ class MLP(object):
         all_weights['w1'] = tf.Variable(tf.truncated_normal([self.n_features, self.n_hidden], stddev = .001), name = 'weights1')
         all_weights['b1'] = tf.Variable(tf.truncated_normal([self.n_hidden], stddev = .001), name = 'bias1')
         all_weights['w2'] = tf.Variable(tf.truncated_normal([self.n_hidden, 1], stddev = .001), name = 'weights_o')
-        all_weights['b2'] = tf.Variable(tf.truncated_normal([1], stddev = .001), name = 'biases_o')
+        all_weights['b2'] = tf.Variable(tf.truncated_normal([self.n_hidden2], stddev = .001), name = 'biases_o')
+        all_weights['w3'] = tf.Variable(tf.truncated_normal([self.n_hidden2, 1], stddev = .001), name = 'weights_o2')
+        all_weights['b3'] = tf.Variable(tf.truncated_normal([1], stddev = .001), name = 'biases_o2')
         return all_weights
 
     def train(self, X, Y):
