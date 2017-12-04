@@ -53,25 +53,15 @@ def sigmoid(x):
 
 
 '''Get's Wav File From Path'''
-def getData(num):
-    if num == 1:
-        path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
-        TestSong = []
-        for filename in os.listdir(path8):
-            holder = []
-            holder.append(filename)
-            holder.append([1])
-            TestSong.append(holder)
-        return TestSong
-    if num != 1:
-        path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestingFiles'
-        TestSong = []
-        for filename in os.listdir(path8):
-            holder = []
-            holder.append(filename)
-            holder.append([1])
-            TestSong.append(holder)
-        return TestSong
+def getData():
+    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads'
+    TestSong = []
+    for filename in os.listdir(path8):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        TestSong.append(holder)
+    return TestSong
 
 
 '''Gets Harmonic Pitch Class Profile'''
@@ -188,13 +178,14 @@ def numberToChord(number):
 
 if __name__ == '__main__':
 
-    num = int(sys.argv[1])
+    #num = int(sys.argv[1])
 
     ''' Get Data'''
-    TestChord= getData(num)
+    TestChord= getData()
     
-
+    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 11)),0)
     '''Run it Through Harmonic Pitch Class Profile'''
+    '''
     if num ==1:
         TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
     if num ==2:
@@ -203,7 +194,7 @@ if __name__ == '__main__':
         TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 9)),0)
     if num ==4:
         TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 9)),0)
-    
+    '''
 
     '''Run it Through Neural Network'''
     predictedValues = testNetwork(TestChroma1)
@@ -211,36 +202,43 @@ if __name__ == '__main__':
     '''Checking the Results'''
     '''Hacky Check If it's longer than 700 than chances are it's multiple Chords'''
     '''The Smaller the Length prob means it's a single Chord'''
+    time = []
+    print(len(TestChroma1))
     if len(TestChroma1) > 500:
         i = 0
-        sp = 0
+        chordChange = 0
         chord = 0
+        correctValues = []
         while i < (len(predictedValues)-35):
-            sp = 0
+            chordChange = 0
             if i ==0:
                 chord = findMajority(predictedValues[i:i+20])
-                sp = 1
+                chordChange = 1
             else:
                 temp = findMajority(predictedValues[i-10:i+35])
                 if chord != temp:
                     chord = temp
-                    sp = 1
-            if sp ==1:
+                    chordChange = 1
+            if chordChange ==1:
                 if chord == 1:
-                    print("A")
+                    correctValues.append("A")
                 if chord == 2:
-                    print("B")
+                    correctValues.append("B")
                 if chord == 3:
-                    print("C")
+                    correctValues.append("C")
                 if chord == 4:
-                    print("D")
+                    correctValues.append("D")
                 if chord == 5:
-                    print("E")
+                    correctValues.append("E")
                 if chord == 6:
-                    print("F")
+                    correctValues.append("F")
                 if chord == 7:
-                    print("G")
-            sp = 0
+                    correctValues.append("G")
+                time.append(round((i+35)/45.0,2))
+            chordChange = 0
             i+=35
     else:
-        print(numberToChord(findMajority(predictedValues)))
+        correctValues.append(numberToChord(findMajority(predictedValues)))
+        time.append(0)
+    time[0] = 0
+    print([correctValues, time])

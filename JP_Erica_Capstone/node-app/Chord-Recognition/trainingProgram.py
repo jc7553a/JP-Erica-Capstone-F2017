@@ -232,9 +232,11 @@ def batchTraining(A, Am, Bm, C, D, Dm, E, Em, F, G):
     network = net.MLP(12, 35, 12)
     losses = []
     batchSize = 120
-    for j in range(400):
+    for j in range(250):
         midLosses = []
-        for i in range(500):
+        if j == 199:
+            batchSize = 10
+        for i in range(5000):
             chord = randint(0,9)
             if chord == 0:
                 val = randint(0, len(A)-batchSize)
@@ -289,6 +291,9 @@ def batchTraining(A, Am, Bm, C, D, Dm, E, Em, F, G):
                 
             midLosses.append(network.train(batch, [[classification]]))
         losses.append(np.average(midLosses))
+        if j %100 == 0:
+            plt.plot(losses)
+            plt.show()
     plt.plot(losses)
     plt.show()
     return network
@@ -310,7 +315,7 @@ if __name__ == '__main__':
     #TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
     #TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
     #TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
-    print(len(AChroma))
+    
     
         
     
@@ -337,15 +342,17 @@ if __name__ == '__main__':
     
     neuralNetwork = batchTraining(AChroma, AMChroma, BMChroma, CChroma, DChroma, DMChroma, EChroma, EMChroma, FChroma, GChroma)
     neuralNetwork = trainNetwork(totalData, neuralNetwork)
-    '''
-
+    
     print("Weights")
     print(neuralNetwork.getWeights())
     print("Biases")
     print(neuralNetwork.getBiases())
-    print("Hidden Weights")
+    print("Hidden Weights1")
     print(neuralNetwork.getHiddenWeights())
-    print("Hidden Biases")
+    print("Hidden Biases1")
     print(neuralNetwork.getHiddenBiases())
-    '''
+    print("Hidden Weights2")
+    print(neuralNetwork.getHiddenWeights2())
+    print("Hidden Biases2")
+    print(neuralNetwork.getHiddenBiases2())
     

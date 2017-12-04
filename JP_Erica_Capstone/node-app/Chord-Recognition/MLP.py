@@ -41,7 +41,7 @@ class MLP(object):
         all_weights = dict()
         all_weights['w1'] = tf.Variable(tf.truncated_normal([self.n_features, self.n_hidden], stddev = .001), name = 'weights1')
         all_weights['b1'] = tf.Variable(tf.truncated_normal([self.n_hidden], stddev = .001), name = 'bias1')
-        all_weights['w2'] = tf.Variable(tf.truncated_normal([self.n_hidden, 1], stddev = .001), name = 'weights_o')
+        all_weights['w2'] = tf.Variable(tf.truncated_normal([self.n_hidden, self.n_hidden2], stddev = .001), name = 'weights_o')
         all_weights['b2'] = tf.Variable(tf.truncated_normal([self.n_hidden2], stddev = .001), name = 'biases_o')
         all_weights['w3'] = tf.Variable(tf.truncated_normal([self.n_hidden2, 1], stddev = .001), name = 'weights_o2')
         all_weights['b3'] = tf.Variable(tf.truncated_normal([1], stddev = .001), name = 'biases_o2')
@@ -76,6 +76,12 @@ class MLP(object):
     
     def getHiddenBiases(self):
         return self.sess.run(self.weights['b2'])
+    
+    def getHiddenWeights2(self):
+        return self.sess.run(self.weights['w3'])
+    
+    def getHiddenBiases2(self):
+        return self.sess.run(self.weights['b3'])
 
     'Uncomment to Look at Graph and Nodes'
     #print(tf.get_default_graph().as_graph_def())

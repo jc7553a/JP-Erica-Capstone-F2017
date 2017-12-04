@@ -24,7 +24,7 @@ def hpcp(file_name,
          win_size=4096,
          hop_size=1024,
          window= 'hamming',
-         precision='float32',
+         precision='float64',
          f_min=100,
          f_max=5000,
          global_thr=80,  # in dB below the highest peak
