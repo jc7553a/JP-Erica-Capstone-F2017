@@ -11,6 +11,12 @@ var dataString = '';
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts')); // redirect bootstrap JS
+
+
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'views/index.html'));
 });

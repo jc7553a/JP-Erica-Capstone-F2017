@@ -1,5 +1,4 @@
 window.onload = function() {
-
   // onload find doc elements
   var myfile = document.getElementById("upload-input");
   var audio = document.getElementById("audio");
@@ -9,7 +8,13 @@ window.onload = function() {
   });
 
   $('#upload-input').on('change', function(){
-
+    $(document).on('change', function(){
+      var logo = $('#placeholder');
+      var wrapper = $('#content').contents();
+      wrapper.animate(logo.offset(), 5000, function(){
+        $(this).contents().appendTo(logo);
+      });      
+    });
     var file = $(this).get(0).files[0];
     audio.src = URL.createObjectURL(file);
     audio.load();
@@ -37,7 +42,7 @@ window.onload = function() {
     var WIDTH = canvas.width;
     var HEIGHT = canvas.height;
 
-    var barWidth = (WIDTH / bufferLength) * 2.5;
+    var barWidth = (WIDTH / bufferLength) * 4;
     var barHeight;
     var x = 0;
 
@@ -48,26 +53,29 @@ window.onload = function() {
 
       analyser.getByteFrequencyData(dataArray);
 
-      ctx.fillStyle = "#000";
+      ctx.fillStyle = "#13db8b";
       ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-      for (var i = 0; i < bufferLength; i++) {
+      for (var i = 4; i < bufferLength; i = i+2) {
         barHeight = dataArray[i];
         
-        var r = barHeight + (25 * (i/bufferLength));
+        var r = barHeight + (35 * (i/bufferLength));
         var g = 250 * (i/bufferLength);
         var b = 50;
 
-        ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+        //ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+        ctx.fillStyle = '#baecc1';
+        ctx.fillRect(x, HEIGHT/2 - 1, barWidth, barHeight);
+        ctx.fillRect(x, HEIGHT/2 - barHeight, barWidth, barHeight);
 
-        x += barWidth + 1;
+        x += barWidth + 2;
       }
     }
 
     audio.play();
     renderFrame();
 
+    // upload file
     console.log(file);
 
     if (file){
