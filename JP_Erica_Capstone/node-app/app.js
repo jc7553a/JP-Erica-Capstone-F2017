@@ -46,7 +46,15 @@ app.post('/upload', function(req, res){
     
     var alertSuccess = function(dataString){
         console.log("alertSuccess");
-        successJSONString = "{\"success\" : \"" + dataString.toString() +  "\", \"status\" : 200}";
+        successJSONString = dataString.toString();
+	//console.log(typeof successJSONString);
+	var newString = successJSONString.replace(/\[/g , "");
+	var newString2 = newString.replace(/\]/g, "");
+	var newString3 = newString2.replace(/\'/g, "");
+	var newString4 = newString3.replace(/\, /g, "");
+	//var array = JSON.parse("["+ successJSONString + "]");
+	//var chord = array[0][0]
+	console.log(newString4);
         res.end(successJSONString);  
     }
 

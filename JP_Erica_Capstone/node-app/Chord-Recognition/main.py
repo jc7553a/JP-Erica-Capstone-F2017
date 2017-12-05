@@ -240,4 +240,4 @@ if __name__ == '__main__':
         time.append(0)
     time[0] = 0
     
-    print([str(correctValues) + str(time) + lineString])
+    print([str(correctValues)])
