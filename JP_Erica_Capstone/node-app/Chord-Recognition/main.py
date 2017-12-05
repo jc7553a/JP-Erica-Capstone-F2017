@@ -182,10 +182,12 @@ def read_in():
 
 
 if __name__ == '__main__':
+    ''''
     lines = read_in()
     lineString= ""
     for l in lines:
         lineString +=str(l)
+    '''
     ''' Get Data'''
     
     TestChord= getData()
@@ -239,5 +241,5 @@ if __name__ == '__main__':
         correctValues.append(numberToChord(findMajority(predictedValues)))
         time.append(0)
     time[0] = 0
-    
-    print([str(correctValues) + str(time) + lineString])
+    print(correctValues)
+    #print([str(correctValues) + lineString])

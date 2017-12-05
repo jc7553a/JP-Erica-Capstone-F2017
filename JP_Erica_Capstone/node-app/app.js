@@ -49,13 +49,13 @@ app.post('/upload', function(req, res){
         console.log("alertSuccess");
         successJSONString = "{\"success\" : \"" + dataString.toString() +  "\", \"status\" : 200}";
         console.log(typeof successJSONString);
-	var len = successJSONString.length;
-	console.log(len);
-	var newString = successJSONString.substring(16, (len- 44));
-	console.log(newString);
-	var newString2 = newString.replace(/'/g, '"');
-	var array = JSON.parse("[" + newString2 + "]");
-	console.log(typeof array)
+	//var len = successJSONString.length;
+	//console.log(len);
+	//var newString = successJSONString.substring(16, (len- 44));
+	//console.log(newString);
+	//var newString2 = newString.replace(/'/g, '"');
+	//var array = JSON.parse("[" + newString2 + "]");
+	//console.log(typeof array)
 	res.end(successJSONString);  
     }
 
