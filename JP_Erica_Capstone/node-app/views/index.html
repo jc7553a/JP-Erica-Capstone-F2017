@@ -13,21 +13,24 @@
 </head>
 <body>
   <div id="logo"> 
-    <h>Chordgi</h>
-    <div id="placeholder"></div>
+    <span>
+    <div id="corgi-header" class="header">
+        <label for="upload-input" id="cute-header" class="custom-file-upload-header" src="/images/logo.png"></label>
+        <input id="upload-input" type="file" name="uploads[]"></br>
+    </div>
+    </span>
   </div>
 
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      </ol>
-    
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner">
-        <div class="item active">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        </ol>
+      
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+          <div class="item active"></div>
         </div>
-      </div>
     
       <!-- Left and right controls -->
       <a class="left carousel-control" href="#myCarousel" data-slide="prev">
@@ -41,8 +44,10 @@
     </div>
  
   <div id="content">
-    <label for="upload-input" id="cute" class="custom-file-upload" src="/images/corgi.gif"></label>
-    <input id="upload-input" type="file" name="uploads[]"></br>
+    <div id="corgi" class="start"></div>
+      <label for="upload-input" id="cute" class="custom-file-upload" src="/images/corgi.gif"></label>
+      <input id="upload-input" type="file" name="uploads[]"></br>
+    </div>
     <canvas id ="canvas"></canvas>
   </div>
 
