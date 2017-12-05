@@ -4,7 +4,14 @@ var path = require('path');
 var formidable = require('formidable'); // file transfer
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var py = spawn('python', ['helloworld.py']);
+try{
+process.chdir('\Chord-Recognition');
+var py = spawn('python', ['main.py']);
+}
+catch(err)
+{
+console.log('dammit');
+}
 
 var data = "Erica and JP";
 var dataString = '';

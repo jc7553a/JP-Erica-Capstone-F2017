@@ -2,10 +2,11 @@ import numpy as np
 import math
 import HPCP as HPCP
 import os
-import sys
+import sys, json
 
 
 '''Our Neural Network HardCoded'''
+
 myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.76013899,   0.77143258,
        -3.57863641, -10.41831493,   2.58790898,   2.19516683],
      [ -3.04577971,  -2.60280824,  -1.73133159,  -2.58085465,  -3.33878398,
@@ -48,11 +49,12 @@ myValues = { "Weights" : [[  1.33877695,   2.42611885,  -1.6498524,    7.7601389
 
 
 '''Our Activation Function For Neural Network'''
+
 def sigmoid(x):
     return 1/(1+math.exp(-x))
 
-
 '''Get's Wav File From Path'''
+
 def getData():
     path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads'
     TestSong = []
@@ -62,7 +64,6 @@ def getData():
         holder.append([1])
         TestSong.append(holder)
     return TestSong
-
 
 '''Gets Harmonic Pitch Class Profile'''
 def getChroma(files, val):
@@ -78,7 +79,6 @@ def cleanUpChroma(chromaGiven):
     for i in range(len(chromaBack)): 
         chromaBack2.append(chromaBack[i][~(chromaBack[i]==0).all(1)])
     return chromaBack2
-
 
 '''Pointless Function but let it be'''
 def addClassification(chromaGiven, val):
@@ -136,7 +136,6 @@ def findMaxIndex(listGiven):
             maxIndex = j
     return maxIndex
 
-
 '''Finds Which Chord Occurs Most Frequently'''
 def findMajority(listGiven):
     myArray = [0,0,0,0,0,0,0]
@@ -176,25 +175,24 @@ def numberToChord(number):
         return "G"
 
 
+def read_in():
+    lines = sys.stdin.readlines()
+    #Since our input would only be having one line, parse our JSON data from that
+    return json.loads(lines[0])
+
+
 if __name__ == '__main__':
-
-    #num = int(sys.argv[1])
-
+    lines = read_in()
+    lineString= ""
+    for l in lines:
+        lineString +=str(l)
     ''' Get Data'''
-    TestChord= getData()
     
+    TestChord= getData()
+    #print(TestChord)
     TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 11)),0)
     '''Run it Through Harmonic Pitch Class Profile'''
-    '''
-    if num ==1:
-        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
-    if num ==2:
-        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 9)),0)
-    if num ==3:
-        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 9)),0)
-    if num ==4:
-        TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 9)),0)
-    '''
+
 
     '''Run it Through Neural Network'''
     predictedValues = testNetwork(TestChroma1)
@@ -202,13 +200,13 @@ if __name__ == '__main__':
     '''Checking the Results'''
     '''Hacky Check If it's longer than 700 than chances are it's multiple Chords'''
     '''The Smaller the Length prob means it's a single Chord'''
+    
     time = []
-    print(len(TestChroma1))
+    correctValues = []
     if len(TestChroma1) > 500:
         i = 0
         chordChange = 0
         chord = 0
-        correctValues = []
         while i < (len(predictedValues)-35):
             chordChange = 0
             if i ==0:
@@ -241,4 +239,5 @@ if __name__ == '__main__':
         correctValues.append(numberToChord(findMajority(predictedValues)))
         time.append(0)
     time[0] = 0
-    print([correctValues, time])
+    
+    print([str(correctValues) + str(time) + lineString])
