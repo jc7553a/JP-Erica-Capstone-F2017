@@ -3,18 +3,16 @@ window.onload = function() {
   var myfile = document.getElementById("upload-input");
   var audio = document.getElementById("audio");
 
-  $('.upload-btn').on('click', function (){
-      $('#upload-input').click();
-  });
+  // $('.upload-btn').on('click', function (){
+  //     $('#upload-input').click();
+  // });
 
   $('#upload-input').on('change', function(){
-    $(document).on('change', function(){
-      var logo = $('#placeholder');
-      var wrapper = $('#content').contents();
-      wrapper.animate(logo.offset(), 5000, function(){
-        $(this).contents().appendTo(logo);
-      });      
-    });
+    try {
+      $('#cute').remove();
+    } catch(err) {
+      pass;
+    }
     var file = $(this).get(0).files[0];
     audio.src = URL.createObjectURL(file);
     audio.load();
@@ -26,7 +24,7 @@ window.onload = function() {
 
     var canvas = document.getElementById("canvas");
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight - 150;
     var ctx = canvas.getContext("2d");
 
     src.connect(analyser);
@@ -92,13 +90,11 @@ window.onload = function() {
         processData: false,
         contentType: false,
         success: function (result) {
+          console.log("result");
           console.log(result);
-          if(result.status == 200){
-              self.isEditMode(!self.isEditMode());
-          }
-          },
-          error: function(result){
-              console.log(result);
+          console.log(result.status);
+          var mytext = '<h>testing one, two, three</h>';
+          $('.carousel-inner').html(mytext)
         },
         xhr: function() {
           // create an XMLHttpRequest
