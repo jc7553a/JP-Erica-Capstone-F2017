@@ -5,13 +5,14 @@ import random as ra
 import math
 import tensorflow as tf
 import os
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 from random import randint
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
 
 def getData():
+    '''
     path = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord'
     path2 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/BChord'
     path3 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/CChord'
@@ -20,6 +21,18 @@ def getData():
     path6 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/FChord'
     path7 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/GChord'
     path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
+    '''
+    path = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/a'
+    path2 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/am'
+    path3 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/bm'
+    path4 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/c'
+    path5 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/d'
+    path6 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/dm'
+    path7 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/e'
+    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/em'
+    path9 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/f'
+    path10 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/g'
+    #path11 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/TestSong'
 
     AMajor = []
     TestSong = []
@@ -28,57 +41,79 @@ def getData():
         holder.append(filename)
         holder.append([1])
         AMajor.append(holder)
-        
-    BMajor = []
+    AMinor = []
+    TestSong = []
     for filename in os.listdir(path2):
         holder = []
         holder.append(filename)
-        holder.append([1])
-        BMajor.append(holder)
+        holder.append([2])
+        AMinor.append(holder)
+        
+    BMinor = []
+    for filename in os.listdir(path3):
+        holder = []
+        holder.append(filename)
+        holder.append([3])
+        BMinor.append(holder)
 
     CMajor = []
-    for filename in os.listdir(path3):
+    for filename in os.listdir(path4):
         holder = []
         holder.append(filename)
         holder.append([1])
         CMajor.append(holder)
 
     DMajor = []
-    for filename in os.listdir(path4):
+    for filename in os.listdir(path5):
         holder = []
         holder.append(filename)
         holder.append([2])
         DMajor.append(holder)
 
+    DMinor = []
+    for filename in os.listdir(path6):
+        holder = []
+        holder.append(filename)
+        holder.append([2])
+        DMinor.append(holder)
+
     EMajor = []
-    for filename in os.listdir(path5):
+    for filename in os.listdir(path7):
         holder = []
         holder.append(filename)
         holder.append([1])
         EMajor.append(holder)
 
+    EMinor = []
+    for filename in os.listdir(path8):
+        holder = []
+        holder.append(filename)
+        holder.append([1])
+        EMinor.append(holder)
+        
     FMajor = []
-    for filename in os.listdir(path6):
+    for filename in os.listdir(path9):
         holder = []
         holder.append(filename)
         holder.append([1])
         FMajor.append(holder)
 
     GMajor = []
-    for filename in os.listdir(path7):
+    for filename in os.listdir(path10):
         holder = []
         holder.append(filename)
         holder.append([3])
         GMajor.append(holder)
     
     TestSong = []
-    for filename in os.listdir(path8):
+    '''
+    for filename in os.listdir(path11):
         holder = []
         holder.append(filename)
         holder.append([1])
         TestSong.append(holder)
-        
-    return AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor, TestSong
+    '''
+    return AMajor, AMinor, BMinor, CMajor, DMajor, DMinor, EMajor, EMinor, FMajor, GMajor, TestSong
 
 
 '''Running Harmonic Pitch Class Profile on Training Data'''
@@ -111,19 +146,20 @@ def addClassification(chromaGiven, val):
     return chromaBack
 
 '''Train Neural Network'''
-def trainNetwork(data):
+def trainNetwork(data, network):
     print("Training Network....")
-    network = net.MLP(12, 9)
     #np.random.shuffle(data)
     losses = []
+    num = 0
     for i in range(5):
         midLosses = []
         for j in range(len(data)):
             rand = randint(0, len(data)-1)
             midLosses.append(network.train([data[rand][0:12]], [[data[rand][12]]]))
         losses.append(np.average(midLosses))
-    #plt.plot(losses)
-    #plt.show()
+        print("Epoch " +str(i))
+    plt.plot(losses)
+    plt.show()
     print("Done Training")
     return network
 
@@ -192,215 +228,131 @@ def findMajority(listGiven):
     majorityLeader = findMaxIndex(myArray)
     return majorityLeader+1
     
-
+def batchTraining(A, Am, Bm, C, D, Dm, E, Em, F, G):
+    network = net.MLP(12, 35, 12)
+    losses = []
+    batchSize = 120
+    for j in range(250):
+        midLosses = []
+        if j == 199:
+            batchSize = 10
+        for i in range(5000):
+            chord = randint(0,9)
+            if chord == 0:
+                val = randint(0, len(A)-batchSize)
+                batch = np.array(A[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 1:
+                val = randint(0, len(Am)-batchSize)
+                batch = np.array(Am[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 2:
+                val = randint(0, len(Bm)-batchSize)
+                batch = np.array(Bm[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 3:
+                val = randint(0, len(C)-batchSize)
+                batch = np.array(C[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 4:
+                val = randint(0, len(D)-batchSize)
+                batch = np.array(D[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 5:
+                val = randint(0, len(Dm)-batchSize)
+                batch = np.array(Dm[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 6:
+                val = randint(0, len(E)-batchSize)
+                batch = np.array(E[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 7:
+                val = randint(0, len(Em)-batchSize)
+                batch = np.array(Em[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 8:
+                val = randint(0, len(F)-batchSize)
+                batch = np.array(F[val: val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+            elif chord == 9:
+                val = randint(0, len(G)-batchSize)
+                batch = np.array(G[val:val+batchSize])
+                classification = batch[0][12]
+                batch = batch[:, 0:12]
+                
+            midLosses.append(network.train(batch, [[classification]]))
+        losses.append(np.average(midLosses))
+        if j %100 == 0:
+            plt.plot(losses)
+            plt.show()
+    plt.plot(losses)
+    plt.show()
+    return network
+    
 if __name__ == '__main__':
-    AMajor, BMajor, CMajor, DMajor, EMajor, FMajor, GMajor, TestChord= getData()
-    print(TestChord[1][:])
+    AMajor, AMinor, BMinor, CMajor, DMajor, DMinor, EMajor, EMinor, FMajor, GMajor, TestChord= getData()
+    
     
     AChroma = addClassification(cleanUpChroma(getChroma(AMajor, 1)),1)
-    BChroma = addClassification(cleanUpChroma(getChroma(BMajor, 2)),2)
-    CChroma = addClassification(cleanUpChroma(getChroma(CMajor, 3)),3)
-    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 4)),4)
-    EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 5)),5)
-    FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 6)),6)
-    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 7)),7)
-    TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
-    TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
+    AMChroma = addClassification(cleanUpChroma(getChroma(AMinor, 2)),2)
+    BMChroma = addClassification(cleanUpChroma(getChroma(BMinor, 3)),3)
+    CChroma = addClassification(cleanUpChroma(getChroma(CMajor, 4)),4)
+    DChroma = addClassification(cleanUpChroma(getChroma(DMajor, 5)),5)
+    DMChroma = addClassification(cleanUpChroma(getChroma(DMinor, 6)),6)
+    EChroma = addClassification(cleanUpChroma(getChroma(EMajor, 7)),7)
+    EMChroma = addClassification(cleanUpChroma(getChroma(EMinor, 8)),8)
+    FChroma = addClassification(cleanUpChroma(getChroma(FMajor, 9)),9)
+    GChroma = addClassification(cleanUpChroma(getChroma(GMajor, 10)),10)
+    #TestChroma1 = addClassification(cleanUpChroma(getChroma([TestChord[0][:]], 8)),0)
+    #TestChroma2 = addClassification(cleanUpChroma(getChroma([TestChord[1][:]], 8)),0)
     #TestChroma3 = addClassification(cleanUpChroma(getChroma([TestChord[2][:]], 8)),0)
+    
     
         
     
     '''Concatenating All Matrices Together
        From Above to Create One Data Set'''
-    totalData = np.concatenate((np.array(AChroma), np.array(BChroma)))
+    
+    totalData = np.concatenate((np.array(AChroma), np.array(AMChroma)))
+    totalData = np.concatenate((totalData, np.array(BMChroma)))
     totalData = np.concatenate((totalData, np.array(CChroma)))
     totalData = np.concatenate((totalData, np.array(DChroma)))
+    totalData = np.concatenate((totalData, np.array(DMChroma)))
     totalData = np.concatenate((totalData, np.array(EChroma)))
+    totalData = np.concatenate((totalData, np.array(EMChroma)))
     totalData = np.concatenate((totalData, np.array(FChroma)))
     totalData = np.concatenate((totalData, np.array(GChroma)))
     np.random.shuffle(totalData)
-    
-    '''Choosing Random Samples to Test on
-       Then Deleting them from Training'''
-    '''
-    trainSize = 10000
-    testingData = []    
-    for i in range(trainSize):
-        #rand = randint(0, len(totalData)-1)
-        testingData.append(totalData[i][:])
-        totalData = np.delete(totalData,(i), axis = 0)
-    '''
-    #testingData = totalData[0:10000][:]
-    #totalData = totalData[10000:len(totalData)-1][:]
+
+
+
     
     
     '''Train Network'''
-    neuralNetwork = trainNetwork(totalData)
-
-    '''Test Network'''
-    predictedValues = testNetwork(neuralNetwork, TestChroma2)
-    
-
-    '''
-    ones = 0
-    twos= 0
-    threes = 0
-    fours = 0
-    fives = 0
-    six = 0
-    seven = 0
-    for i in range(len(predictedValues)):
-        if predictedValues[i] == 1:
-            ones +=1
-        if predictedValues[i] == 2:
-            twos +=1
-        if predictedValues[i] == 3:
-            threes +=1
-        if predictedValues[i] == 4:
-            fours +=1
-        if predictedValues[i] == 5:
-            fives +=1
-        if predictedValues[i] == 6:
-            six +=1
-        if predictedValues[i] == 7:
-            seven +=1
-
-    things = []
-    things.append(ones)
-    things.append(twos)
-    things.append(threes)
-    things.append(fours)
-    things.append(fives)
-    things.append(six)
-    things.append(seven)
-    print(things)
-    print(findMaxIndex(things))
-    '''
-
-    #print(findMajority(predictedValues))
-    
-    i = 0
-    while i < (len(predictedValues)-50):
-        if i ==0:
-            chord = 1
-            sp = 1
-        else:
-            temp = findMajority(predictedValues[i:i+50])
-            if chord != temp:
-                chord = temp
-                sp = 1
-        if sp ==1:
-            if chord == 1:
-                print("A")
-            if chord == 2:
-                print("B")
-            if chord == 3:
-                print("C")
-            if chord == 4:
-                print("D")
-            if chord == 5:
-                print("E")
-            if chord == 6:
-                print("F")
-            if chord == 7:
-                print("G")
-        sp = 0
-        
-        i+=50
-                             
-
-    #neuralNetwork.saveTensor() 
-
-    '''
 
     
-    falseAChord = 0
-    AChordCorrect = 0
-    falseBChord = 0
-    BChordCorrect = 0
-    falseCChord = 0
-    CChordCorrect = 0
-    falseDChord = 0
-    DChordCorrect = 0
-    falseEChord = 0
-    EChordCorrect = 0
-    falseFChord = 0
-    FChordCorrect = 0
-    falseGChord = 0
-    GChordCorrect = 0
-    actual = []
-
-    for i in range(len(predictedValues)):
-        if predictedValues[i] == 1 and testingData[i][12] == 1:
-            AChordCorrect += 1
-        elif predictedValues[i] != 1 and testingData[i][12] == 1:
-            falseAChord += 1
-        elif predictedValues[i] == 2 and testingData[i][12] == 2:
-            BChordCorrect += 1
-        elif predictedValues[i] != 2 and testingData[i][12] == 2:
-            falseBChord +=1
-        elif predictedValues[i] == 3 and testingData[i][12] == 3:
-            CChordCorrect += 1
-        elif predictedValues[i] != 3 and testingData[i][12] == 3:
-            falseCChord +=1
-        elif predictedValues[i] == 4 and testingData[i][12] == 4:
-            DChordCorrect += 1
-        elif predictedValues[i] != 4 and testingData[i][12] == 4:
-            falseDChord +=1
-        elif predictedValues[i] == 5 and testingData[i][12] == 5:
-            EChordCorrect += 1
-        elif predictedValues[i] != 5 and testingData[i][12] == 5:
-            falseEChord +=1
-        elif predictedValues[i] == 6 and testingData[i][12] == 6:
-            FChordCorrect += 1
-        elif predictedValues[i] != 6 and testingData[i][12] == 6:
-            falseFChord +=1
-        elif predictedValues[i] == 7 and testingData[i][12] == 7:
-            GChordCorrect += 1
-        elif predictedValues[i] != 7 and testingData[i][12] == 7:
-            falseGChord +=1
-
-
-    print("AChord Tests")
-    print(falseAChord)
-    print(AChordCorrect)
-    print("BChord Tests")
-    print(falseBChord)
-    print(BChordCorrect)
-    print("CChord Tests")
-    print(falseCChord)
-    print(CChordCorrect)
-    print("DChord Tests")
-    print(falseDChord)
-    print(DChordCorrect)
-    print("EChord Tests")
-    print(falseEChord)
-    print(EChordCorrect)
-    print("FChord Tests")
-    print(falseFChord)
-    print(FChordCorrect)
-    print("GChord Tests")
-    print(falseGChord)
-    print(GChordCorrect)
-
-            
-    totalCorrect= AChordCorrect + BChordCorrect + CChordCorrect + DChordCorrect + EChordCorrect + FChordCorrect + GChordCorrect
-    total = totalCorrect +(falseAChord + falseBChord + falseCChord+ falseDChord + falseEChord + falseFChord + falseGChord)
-    print("")
-    print("Accuracy")
-    print(float(totalCorrect/total))
-
-    actualValues = []
-    for i in range(len(testingData)):
-        actualValues.append(testingData[i][12])
-    print(testingResults(actualValues, predictedValues))
-        
-    '''
+    neuralNetwork = batchTraining(AChroma, AMChroma, BMChroma, CChroma, DChroma, DMChroma, EChroma, EMChroma, FChroma, GChroma)
+    neuralNetwork = trainNetwork(totalData, neuralNetwork)
+    
     print("Weights")
     print(neuralNetwork.getWeights())
     print("Biases")
     print(neuralNetwork.getBiases())
-    print("Hidden Weights")
+    print("Hidden Weights1")
     print(neuralNetwork.getHiddenWeights())
-    print("Hidden Biases")
+    print("Hidden Biases1")
     print(neuralNetwork.getHiddenBiases())
+    print("Hidden Weights2")
+    print(neuralNetwork.getHiddenWeights2())
+    print("Hidden Biases2")
+    print(neuralNetwork.getHiddenBiases2())
+    
