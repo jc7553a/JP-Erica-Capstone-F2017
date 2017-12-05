@@ -4,8 +4,6 @@ var path = require('path');
 var formidable = require('formidable'); // file transfer
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var py = spawn('python', ['helloworld.py']);
-
 var data = "Erica and JP";
 var dataString = '';
 
@@ -23,25 +21,31 @@ app.get('/', function(req, res){
 
 app.post('/upload', function(req, res){
     var kickoff = function(data){
+        console.log("kickoff");
+        var py = spawn('python', ['helloworld.py']);        
         /// function to kickoff python script using child_process mod
         var dataString = ""
         // converts data to string and then send it to python script
         py.stdout.on('data', function(data){
+            console.log(data);
             dataString += data.toString();
         });
         py.stdout.on('end', function(){
             console.log('Test:',dataString);
             alertSuccess(dataString);
         });
-        py.stdin.write(JSON.stringify(data));
+        console.log("here");
+        console.log(data.toString());
+        try {
+            py.stdin.write(data.toString());
+        } catch(err) {
+            console.log(err);
+        }
+        console.log("test");
         py.stdin.end();
+        console.log("kickoff done");
     }
     
-    var alertSuccess = function(dataString){
-        console.log("alertSuccess");
-        successJSONString = "{\"success\" : \"" + dataString.toString() +  "\", \"status\" : 200}";
-        res.end(successJSONString);  
-    }
 
     // create an incoming form object
     var form = new formidable.IncomingForm();
@@ -56,6 +60,7 @@ app.post('/upload', function(req, res){
     form.on('file', function(field, file) {
         // save file as test.wav
         fs.rename(file.path, path.join(form.uploadDir, "test.wav"));
+        console.log("saved");
     });
 
     // log any errors that occur
@@ -67,6 +72,13 @@ app.post('/upload', function(req, res){
     form.on('end', function() {
         kickoff("/Data/Uploads/test.wav");
     });
+
+    var alertSuccess = function(dataString){
+        console.log("alertSuccess");
+        successJSONString = dataString.replace(/'/g, ' ');
+        //delete file
+        res.end(successJSONString);  
+    }
 
     // parse the incoming request containing the form data
     form.parse(req);

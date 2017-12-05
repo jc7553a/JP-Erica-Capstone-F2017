@@ -15,7 +15,7 @@ def main():
         linesString += str(l)
 
     #return the sum to the output stream
-    print ["Hello there " + linesString]
+    print "Hello there " + linesString
 
 #start process
 if __name__ == '__main__':
