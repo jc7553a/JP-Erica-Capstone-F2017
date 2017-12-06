@@ -23,5 +23,5 @@ import sys, json
 #     main()
 
 data = "this began life in python"
-print "data"
+print(data)
 # sys.stdout.flush()

@@ -29,7 +29,7 @@ app.post('/upload', function(req, res){
         var dataString = "";
         console.log('readingin');
 
-        var py = spawn('python', ['helloworld.py']);        
+        var py = spawn('python3', ['helloworld.py']);        
         var textChunk = "Hai";
         py.stdout.on('data', function(chunk){
             textChunk = chunk.toString('utf8');// buffer to string
