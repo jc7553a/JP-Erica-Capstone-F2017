@@ -44,6 +44,7 @@ window.onload = function() {
         },
         xhr: function() {
           console.log("xhr");
+	$('.carousel-inner').html('<h>... uploading ...</h>');
           // create an XMLHttpRequest
           var xhr = new XMLHttpRequest();
 
