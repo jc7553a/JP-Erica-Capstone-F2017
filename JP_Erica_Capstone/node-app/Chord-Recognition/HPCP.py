@@ -101,8 +101,7 @@ def hpcp(file_name,
     if pathVal == 10:
         os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Guitar_Only/g')
     if pathVal == 11:
-        os.chdir('C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads')    
-    
+        os.chdir('/home/safeuser/JP-Erica-Capstone-F2017/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads')
 
     # spectrogram
     y, sr = read_audio(file_name)
