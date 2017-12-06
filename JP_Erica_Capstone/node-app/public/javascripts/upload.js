@@ -73,8 +73,7 @@ window.onload = function() {
       }).done(function(result){
         console.log("done");
         console.log(result);
-
-        $('.carousel-inner').text(result);
+        $('.carousel-inner').html('<h>' + result + '</h>');
 
         audio.src = URL.createObjectURL(file);
         audio.load();

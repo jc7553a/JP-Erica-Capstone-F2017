@@ -182,10 +182,10 @@ def read_in():
 
 
 if __name__ == '__main__':
-    lines = read_in()
-    lineString= ""
-    for l in lines:
-        lineString +=str(l)
+    #lines = read_in()
+    #lineString= ""
+    #for l in lines:
+    #    lineString +=str(l)
     ''' Get Data'''
     
     TestChord= getData()
@@ -239,5 +239,5 @@ if __name__ == '__main__':
         correctValues.append(numberToChord(findMajority(predictedValues)))
         time.append(0)
     time[0] = 0
-    
+    #os.remove('/home/safeuser/JP-Erica-Capstone-F2017/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads/test.wav')
     print(str(correctValues))

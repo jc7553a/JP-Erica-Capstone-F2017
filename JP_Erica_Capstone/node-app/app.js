@@ -5,9 +5,10 @@ var formidable = require('formidable'); // file transfer
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 
+process.chdir('\Chord-Recognition');
+
 var data = "Erica and JP";
 var dataString = '';
-var counter = 1;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -24,16 +25,11 @@ app.get('/', function(req, res){
 app.post('/upload', function(req, res){
     var kickoff = function(data){
         console.log("kickoff");
-<<<<<<< HEAD
-        var py = spawn('python', ['main.py']);       
-=======
-        
->>>>>>> 5d1811e0a88af564ac1ce4cde071073638426ab5
         /// function to kickoff python script using child_process mod
         var dataString = "";
         console.log('readingin');
 
-        var py = spawn('python', ['helloworld.py']);        
+        var py = spawn('python3', ['main.py']);
         var textChunk = "Hai";
         py.stdout.on('data', function(chunk){
             textChunk = chunk.toString('utf8');// buffer to string
@@ -47,9 +43,7 @@ app.post('/upload', function(req, res){
         // });
         py.stdout.on('end', function(){
             console.log(textChunk);
-            textChunk = textChunk + counter.toString();
             alertSuccess(textChunk);
-            counter = counter + 1;
             //py.stdin.write(data.toString());
         });
         // console.log("here");
@@ -71,11 +65,11 @@ app.post('/upload', function(req, res){
 	var newString = successJSONString.replace(/\[/g , "");
 	var newString2 = newString.replace(/\]/g, "");
 	var newString3 = newString2.replace(/\'/g, "");
-	var newString4 = newString3.replace(/\, /g, "");
+	var newString4 = newString3.replace(/\, /g, " ");
 	//var array = JSON.parse("["+ successJSONString + "]");
 	//var chord = array[0][0]
 	console.log(newString4);
-        res.end(successJSONString);  
+        res.end(newString4);  
     }
 
     // create an incoming form object
@@ -104,19 +98,20 @@ app.post('/upload', function(req, res){
         kickoff("/Data/Uploads/test.wav");
     });
 
-    var alertSuccess = function(dataString){
+
+   /* var alertSuccess = function(dataString){
         console.log("alertSuccess");
         console.log(dataString);
         //successJSONString = dataString.replace(/'/g, ' ');
         //delete file
         res.end(dataString);  
-    }
+    }*/
 
     // parse the incoming request containing the form data
     form.parse(req);
 });
 
 // have server listen on port 3000
-var server = app.listen(3000, function(){
-    console.log('Server listening on port 3000');
+var server = app.listen(80, function(){
+    console.log('Server listening on port 80');
 });
