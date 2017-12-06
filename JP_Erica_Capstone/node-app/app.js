@@ -4,8 +4,10 @@ var path = require('path');
 var formidable = require('formidable'); // file transfer
 var fs = require('fs');
 var spawn = require('child_process').spawn;
+
 var data = "Erica and JP";
 var dataString = '';
+var counter = 1;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -22,28 +24,40 @@ app.get('/', function(req, res){
 app.post('/upload', function(req, res){
     var kickoff = function(data){
         console.log("kickoff");
-        var py = spawn('python', ['helloworld.py']);        
+        
         /// function to kickoff python script using child_process mod
-        var dataString = ""
+        var dataString = "";
+        console.log('readingin');
+
+        var py = spawn('python', ['helloworld.py']);        
+        var textChunk = "Hai";
+        py.stdout.on('data', function(chunk){
+            textChunk = chunk.toString('utf8');// buffer to string
+            console.log(textChunk);
+        });
         // converts data to string and then send it to python script
-        py.stdout.on('data', function(data){
-            console.log(data);
-            dataString += data.toString();
-        });
+        // py.stdout.on('data', function(data){
+        //     console.log("data");
+        //     console.log(data);
+        //     dataString += data.toString();
+        // });
         py.stdout.on('end', function(){
-            console.log('Test:',dataString);
-            alertSuccess(dataString);
+            console.log(textChunk);
+            textChunk = textChunk + counter.toString();
+            alertSuccess(textChunk);
+            counter = counter + 1;
+            //py.stdin.write(data.toString());
         });
-        console.log("here");
-        console.log(data.toString());
-        try {
-            py.stdin.write(data.toString());
-        } catch(err) {
-            console.log(err);
-        }
-        console.log("test");
-        py.stdin.end();
-        console.log("kickoff done");
+        // console.log("here");
+        // console.log(data.toString());
+        // try {
+        //     py.stdin.write(data.toString());
+        // } catch(err) {
+        //     console.log(err);
+        // }
+        // console.log("test");
+        // py.stdin.end();
+        // console.log("kickoff done");
     }
     
 
@@ -75,9 +89,10 @@ app.post('/upload', function(req, res){
 
     var alertSuccess = function(dataString){
         console.log("alertSuccess");
-        successJSONString = dataString.replace(/'/g, ' ');
+        console.log(dataString);
+        //successJSONString = dataString.replace(/'/g, ' ');
         //delete file
-        res.end(successJSONString);  
+        res.end(dataString);  
     }
 
     // parse the incoming request containing the form data
