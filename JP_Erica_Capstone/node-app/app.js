@@ -30,7 +30,7 @@ app.post('/upload', function(req, res){
         console.log('readingin');
 
         var py = spawn('python3', ['main.py']);
-        var textChunk = "Hai";
+        var textChunk = "Uh-oh, your file is too large. Please select a smaller one";
         py.stdout.on('data', function(chunk){
             textChunk = chunk.toString('utf8');// buffer to string
             console.log(textChunk);
