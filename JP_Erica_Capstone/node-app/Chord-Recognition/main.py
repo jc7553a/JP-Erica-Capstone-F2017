@@ -56,7 +56,7 @@ def sigmoid(x):
 '''Get's Wav File From Path'''
 
 def getData():
-    path8 = 'C:/JP_Erica_Capstone/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads'
+    path8 = '/home/safeuser/JP-Erica-Capstone-F2017/JP_Erica_Capstone/node-app/Chord-Recognition/Data/Uploads'
     TestSong = []
     for filename in os.listdir(path8):
         holder = []
@@ -240,4 +240,4 @@ if __name__ == '__main__':
         time.append(0)
     time[0] = 0
     
-    print([str(correctValues)])
+    print(str(correctValues))
